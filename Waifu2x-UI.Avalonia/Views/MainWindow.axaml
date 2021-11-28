@@ -14,7 +14,7 @@
 
     <Window.Padding>10</Window.Padding>
     
-    <Grid ColumnDefinitions="auto, auto, *, auto" RowDefinitions="auto, auto, *, *, auto">
+    <Grid ColumnDefinitions="auto, auto, *, auto" RowDefinitions="auto, auto, auto, *, auto">
         
         <TextBlock Grid.ColumnSpan="2" 
                    FontSize="40"
@@ -36,7 +36,20 @@
                  Text="{Binding ExecutableFilepath}"
                  Watermark="Please select your Waifu2X executable."/>
         
-        <CheckBox Grid.Row="2" Grid.Column="1"
+        <Button Grid.Row="2" Grid.Column="0"
+                Margin="5"
+                Content="Open"
+                Command="{Binding PickInputImageCommand}"/>
+        
+        <TextBox Grid.Row="2" Grid.Column="1" 
+                 HorizontalAlignment="Left"
+                 VerticalContentAlignment="Center"
+                 MaxWidth="500"
+                 IsReadOnly="True" 
+                 Text="{Binding InputImagePath}"
+                 Watermark="Please select an input image."/>
+        
+        <CheckBox Grid.Row="2" Grid.Column="2"
             Content="Verbose output" 
             IsChecked="{Binding VerboseOutput}"/>
         
