@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -21,11 +20,10 @@ namespace Waifu2x_UI.Avalonia.Views
             this.AttachDevTools();
 #endif
             
-            this.WhenActivated(
-                d =>
+            this.WhenActivated(d =>
                 {
                     d(ViewModel!.OpenFindExecutableDialog.RegisterHandler(ShowDialogAsync));
-                    d(ViewModel!.FindImageDialog.RegisterHandler(ShowDialogAsync));
+                    d(ViewModel!.FindImageDialog.RegisterHandler(ShowImageDialogAsync));
                 });
         }
 
@@ -42,9 +40,37 @@ namespace Waifu2x_UI.Avalonia.Views
                 Directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
             };
 
-            var result = await dialog.ShowAsync(this) ?? Array.Empty<string>();
+            var result = await dialog.ShowAsync(this);
             
-            interaction.SetOutput(result.FirstOrDefault());
+            interaction.SetOutput(result?.FirstOrDefault());
+        }
+        
+        private async Task ShowImageDialogAsync(InteractionContext<Unit, string?> interaction)
+        {
+            var dialog = new OpenFileDialog
+            {
+                AllowMultiple = false,
+                
+                Directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                
+                Filters = new()
+                {
+                    new()
+                    {
+                        Name = "Images",
+                        Extensions = new(){"jpg", "jpeg", "png", "webp"}
+                    },
+                    new()
+                    {
+                        Name = "All files",
+                        Extensions = new(){"*"}
+                    }
+                }
+            };
+
+            var result = await dialog.ShowAsync(this);
+            
+            interaction.SetOutput(result?.FirstOrDefault());
         }
     }
 }
