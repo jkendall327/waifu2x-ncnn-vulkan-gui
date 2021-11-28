@@ -44,11 +44,11 @@ namespace Waifu2x_UI.Avalonia.Views
             interaction.SetOutput(result?.FirstOrDefault());
         }
         
-        private async Task ShowImageDialogAsync(InteractionContext<Unit, string?> interaction)
+        private async Task ShowImageDialogAsync(InteractionContext<Unit, string[]> interaction)
         {
             var dialog = new OpenFileDialog
             {
-                AllowMultiple = false,
+                AllowMultiple = true,
                 
                 Directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                 
@@ -69,7 +69,7 @@ namespace Waifu2x_UI.Avalonia.Views
 
             var result = await dialog.ShowAsync(this);
             
-            interaction.SetOutput(result?.FirstOrDefault());
+            interaction.SetOutput(result ?? Array.Empty<string>());
         }
     }
 }

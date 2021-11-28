@@ -15,7 +15,7 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         [Reactive] public bool Verbose { get; set; }
         
         public ReactiveCommand<Unit, Unit> RunCommand { get; }
-        public Interaction<Unit, string?> FindImageDialog { get; } = new();
+        public Interaction<Unit, string[]> FindImageDialog { get; } = new();
         
         public MainWindowViewModel(ICommandRunner runner)
         {
