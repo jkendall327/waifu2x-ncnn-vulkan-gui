@@ -19,7 +19,7 @@
         <TextBlock Grid.ColumnSpan="2" 
                    FontSize="40"
             Padding="15"
-            Text="{Binding TitleCard}" 
+            Text="Waifu2x UI" 
             HorizontalAlignment="Left" 
             VerticalAlignment="Center"/>
         

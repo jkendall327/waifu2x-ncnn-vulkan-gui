@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Waifu2x_UI.Core;
 
 namespace Waifu2x_UI.Avalonia.ViewModels
@@ -11,32 +12,12 @@ namespace Waifu2x_UI.Avalonia.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly ICommandRunner _runner;
-        public string TitleCard => "Waifu2x UI";
-
-        private string _currentCommand = string.Empty;
-        public string CurrentCommand
-        {
-            get => _currentCommand;
-            set => this.RaiseAndSetIfChanged(ref _currentCommand, value);
-        }
-
-        private string _executableFilepath = string.Empty;
-        public string ExecutableFilepath
-        {
-            get => _executableFilepath;
-            set => this.RaiseAndSetIfChanged(ref _executableFilepath, value);
-        }
-
-        private string _selectExecutablePrompt = string.Empty;
-        public string SelectExecutablePrompt
-        {
-            get => _selectExecutablePrompt;
-            set => this.RaiseAndSetIfChanged(ref _selectExecutablePrompt, value);
-        }
         
+        [Reactive] public string CurrentCommand { get; set; }
+        [Reactive] public string ExecutableFilepath { get; set; }
+        [Reactive] public string SelectExecutablePrompt { get; set; }
         public ReactiveCommand<Unit, Unit> RunCommandCommand { get; }
         public ReactiveCommand<Unit, Unit> PickExecutableCommand { get; }
-        
         public Interaction<Unit, string?> OpenFindExecutableDialog { get; } = new();
 
         public MainWindowViewModel(ICommandRunner runner)
@@ -45,7 +26,7 @@ namespace Waifu2x_UI.Avalonia.ViewModels
             
             SetupExecutablePrompt();
 
-            var canExecute = StringHasValue(x => x._currentCommand);
+            var canExecute = StringHasValue(x => x.CurrentCommand);
             
             RunCommandCommand = ReactiveCommand.Create(RunCommand, canExecute);
             PickExecutableCommand = ReactiveCommand.CreateFromTask(PickExecutable);
