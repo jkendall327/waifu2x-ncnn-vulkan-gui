@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="Waifu2x-UI.Avalonia/Views/FilePicker.axaml" value="Waifu2x-UI.Avalonia/Waifu2x-UI.Avalonia.csproj" />
+        <entry key="Waifu2x-UI.Avalonia/Views/MainWindow.axaml" value="Waifu2x-UI.Avalonia/Waifu2x-UI.Avalonia.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
