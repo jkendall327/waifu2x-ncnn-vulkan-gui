@@ -12,19 +12,20 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         public FilePickerViewModel OutputImagePicker { get; }
         
         [Reactive] public string Command { get; set; } = string.Empty;
-        [Reactive] public bool Verbose { get; set; }
+        [Reactive] public string Suffix { get; set; } = "-upscaled";
+        [Reactive] public bool Verbose { get; set; } = true;
         
         public ReactiveCommand<Unit, Unit> RunCommand { get; }
         public Interaction<Unit, string[]> FindImageDialog { get; } = new();
-        
+
         public MainWindowViewModel(ICommandRunner runner)
         {
             _runner = runner;
             
             RunCommand = CreateRunCommand();
             
-            InputImagePicker = new("Please select your input image", FindImageDialog);
-            OutputImagePicker = new("Please select where the output will be placed", FindImageDialog);
+            InputImagePicker = new("Select input...", FindImageDialog);
+            OutputImagePicker = new("Set output directory...", FindImageDialog);
         }
 
         private ReactiveCommand<Unit, Unit> CreateRunCommand()

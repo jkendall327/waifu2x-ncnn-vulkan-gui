@@ -15,7 +15,8 @@
 
     <Window.Padding>10</Window.Padding>
     
-    <Grid ColumnDefinitions="auto, auto, auto, *, auto" RowDefinitions="auto, auto, auto, *, auto">
+    <Grid ColumnDefinitions="auto, auto, auto, auto, *, auto" 
+          RowDefinitions="auto, auto, auto, auto, *, auto">
         
         <TextBlock Grid.ColumnSpan="2" 
                    FontSize="40"
@@ -24,18 +25,30 @@
             HorizontalAlignment="Left" 
             VerticalAlignment="Center"/>
         
-        <views:FilePicker Grid.Row="2" Grid.Column="0" DataContext="{Binding InputImagePicker}"/>
-        <views:FilePicker Grid.Row="3" Grid.Column="0" DataContext="{Binding OutputImagePicker}"/>
+        <views:FilePicker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                          Margin="5"
+                          DataContext="{Binding InputImagePicker}"/>
         
-        <CheckBox Grid.Row="2" Grid.Column="2"
+        <views:FilePicker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                          Margin="5"
+                          DataContext="{Binding OutputImagePicker}"/>
+        
+        <TextBox Grid.Row="2" Grid.Column="3" 
+                 Margin="10 0 0 0"
+                 MinWidth="150"
+                 VerticalContentAlignment="Center"
+                 Text="{Binding Suffix}"
+                 Watermark="Enter suffixes for processed files here"/>
+        
+        <CheckBox Grid.Row="3" Grid.Column="0"
                   Content="Verbose output" 
                   IsChecked="{Binding Verbose}"/>
         
-        <TextBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" 
-                 IsReadOnly="True" 
-                 Text="{Binding Command}"/>
+        <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5"  
+                             IsReadOnly="True" 
+                             Text="{Binding Command}"/>
         
-        <Button Grid.Column="3" Grid.Row="4" 
+        <Button Grid.Row="5" Grid.Column="5"  
                 Margin="5"
                 Content="Run" 
                 Command="{Binding RunCommand}"/>
