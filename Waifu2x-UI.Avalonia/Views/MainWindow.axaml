@@ -36,6 +36,10 @@
                  Text="{Binding ExecutableFilepath}"
                  Watermark="Please select your Waifu2X executable."/>
         
+        <CheckBox Grid.Row="2" Grid.Column="1"
+            Content="Verbose output" 
+            IsChecked="{Binding VerboseOutput}"/>
+        
         <TextBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" 
                  IsReadOnly="True" 
                  Text="{Binding CurrentCommand}"/>

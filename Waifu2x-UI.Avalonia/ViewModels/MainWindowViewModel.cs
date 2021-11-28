@@ -12,9 +12,11 @@ namespace Waifu2x_UI.Avalonia.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly ICommandRunner _runner;
+
+        [Reactive] public string CurrentCommand { get; set; } = string.Empty;
+        [Reactive] public string ExecutableFilepath { get; set; } = string.Empty;
+        [Reactive] public bool VerboseOutput { get; set; }
         
-        [Reactive] public string CurrentCommand { get; set; }
-        [Reactive] public string ExecutableFilepath { get; set; }
         public ReactiveCommand<Unit, Unit> RunCommandCommand { get; }
         public ReactiveCommand<Unit, Unit> PickExecutableCommand { get; }
         public Interaction<Unit, string?> OpenFindExecutableDialog { get; } = new();
@@ -24,7 +26,7 @@ namespace Waifu2x_UI.Avalonia.ViewModels
             _runner = runner;
             
             var canExecute = StringHasValue(x => x.CurrentCommand);
-            
+
             RunCommandCommand = ReactiveCommand.Create(RunCommand, canExecute);
             PickExecutableCommand = ReactiveCommand.CreateFromTask(PickExecutable);
         }
