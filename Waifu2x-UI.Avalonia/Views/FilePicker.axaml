@@ -19,6 +19,7 @@
         <TextBox Grid.Column="1" 
                  HorizontalAlignment="Stretch"
                  VerticalContentAlignment="Center"
+                 MinWidth="200"
                  IsReadOnly="True" 
                  Text="{Binding Content}"
                  Watermark="{Binding Watermark}"/>
