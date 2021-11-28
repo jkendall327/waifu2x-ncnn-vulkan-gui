@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Reactive;
+﻿using System.Reactive;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Waifu2x_UI.Core;
@@ -15,10 +13,10 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         public FilePickerViewModel InputImagePicker { get; }
         public FilePickerViewModel OutputImagePicker { get; }
         
-        [Reactive] public string CurrentCommand { get; set; } = string.Empty;
+        [Reactive] public string Command { get; set; } = string.Empty;
         [Reactive] public bool Verbose { get; set; }
         
-        public ReactiveCommand<Unit, Unit> RunCommandCommand { get; }
+        public ReactiveCommand<Unit, Unit> RunCommand { get; }
         public Interaction<Unit, string?> OpenFindExecutableDialog { get; } = new();
         public Interaction<Unit, string?> FindImageDialog { get; } = new();
         
@@ -26,20 +24,23 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         {
             _runner = runner;
             
-            var canExecute = StringHasValue(x => x.CurrentCommand);
-            RunCommandCommand = ReactiveCommand.Create(RunCommand, canExecute);
+            RunCommand = CreateRunCommand();
             
             ExecutablePicker = new("Please select your Waifu2x executable", OpenFindExecutableDialog);
             InputImagePicker = new("Please select your input image", FindImageDialog);
             OutputImagePicker = new("Please select where the output will be placed", FindImageDialog);
         }
 
-        private IObservable<bool> StringHasValue(Expression<Func<MainWindowViewModel,string>> expression)
+        private ReactiveCommand<Unit, Unit> CreateRunCommand()
         {
-            return this.WhenAnyValue(expression, str => !string.IsNullOrEmpty(str));
+            var canExecute = this.WhenAnyValue(
+                viewModel => viewModel.Command, 
+                command => !string.IsNullOrEmpty(command));
+
+            return ReactiveCommand.Create(Run, canExecute);
         }
 
-        private void RunCommand()
+        private void Run()
         {
             var command = new Command
             {
