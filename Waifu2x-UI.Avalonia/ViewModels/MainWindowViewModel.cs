@@ -4,11 +4,13 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
+using Waifu2x_UI.Core;
 
 namespace Waifu2x_UI.Avalonia.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private readonly ICommandRunner _runner;
         public string Greeting => "Welcome to Avalonia!";
 
         private string _currentCommand = string.Empty;
@@ -37,8 +39,10 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         
         public Interaction<Unit, string?> OpenFindExecutableDialog { get; } = new();
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(ICommandRunner runner)
         {
+            _runner = runner;
+            
             SetupExecutablePrompt();
 
             var canExecute = StringHasValue(x => x._currentCommand);
@@ -75,7 +79,9 @@ namespace Waifu2x_UI.Avalonia.ViewModels
 
         private void RunCommand()
         {
-            var command = CurrentCommand;
+            var command = new Command();
+
+            var output = _runner.Run(ExecutableFilepath, command);
         }
 
         private async Task PickExecutable()
