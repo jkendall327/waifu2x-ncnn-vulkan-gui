@@ -11,7 +11,7 @@ namespace Waifu2x_UI.Avalonia.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly ICommandRunner _runner;
-        public string Greeting => "Welcome to Avalonia!";
+        public string TitleCard => "Waifu2x UI";
 
         private string _currentCommand = string.Empty;
         public string CurrentCommand
