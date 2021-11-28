@@ -25,7 +25,7 @@ namespace Waifu2x_UI.Avalonia.Views
                 d =>
                 {
                     d(ViewModel!.OpenFindExecutableDialog.RegisterHandler(ShowDialogAsync));
-                    d(ViewModel!.OpenFindInputImageDialog.RegisterHandler(ShowDialogAsync));
+                    d(ViewModel!.FindImageDialog.RegisterHandler(ShowDialogAsync));
                 });
         }
 

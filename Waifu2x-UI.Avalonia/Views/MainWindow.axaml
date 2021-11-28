@@ -15,7 +15,7 @@
 
     <Window.Padding>10</Window.Padding>
     
-    <Grid ColumnDefinitions="auto, auto, *, auto" RowDefinitions="auto, auto, auto, *, auto">
+    <Grid ColumnDefinitions="auto, auto, auto, *, auto" RowDefinitions="auto, auto, auto, *, auto">
         
         <TextBlock Grid.ColumnSpan="2" 
                    FontSize="40"
@@ -26,10 +26,11 @@
         
         <views:FilePicker Grid.Row="1" Grid.Column="0" DataContext="{Binding ExecutablePicker}"/>
         <views:FilePicker Grid.Row="2" Grid.Column="0" DataContext="{Binding InputImagePicker}"/>
+        <views:FilePicker Grid.Row="3" Grid.Column="0" DataContext="{Binding OutputImagePicker}"/>
         
         <CheckBox Grid.Row="2" Grid.Column="2"
                   Content="Verbose output" 
-                  IsChecked="{Binding VerboseOutput}"/>
+                  IsChecked="{Binding Verbose}"/>
         
         <TextBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" 
                  IsReadOnly="True" 

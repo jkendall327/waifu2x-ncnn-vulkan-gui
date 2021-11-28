@@ -12,6 +12,7 @@ public class Command
         return $"-c \"{escapedArgs}\"";
     }
 
+    public bool Verbose { get; set; }
     public string InputImagePath { get; set; }
     public string OutputImagePath { get; set; }
     public Flags Flags { get; } = new();
