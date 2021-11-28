@@ -18,6 +18,12 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         public ReactiveCommand<Unit, Unit> RunCommand { get; }
         public Interaction<Unit, string[]> FindImageDialog { get; } = new();
 
+        /// <summary>
+        /// If this is false, then use JPG
+        /// </summary>
+        [Reactive]
+        public bool PngOutput { get; set; } = true;
+
         public MainWindowViewModel(ICommandRunner runner)
         {
             _runner = runner;

@@ -44,6 +44,14 @@
                   Content="Verbose output" 
                   IsChecked="{Binding Verbose}"/>
         
+        <RadioButton Name="PngRadio" Grid.Row="3" Grid.Column="1" 
+                     Content="PNG"
+                     IsChecked="{Binding PngOutput}"/>
+        
+        <RadioButton Grid.Row="3" Grid.Column="2" 
+                     Content="JPG" 
+                     IsChecked="{Binding !#PngRadio.IsChecked}"/>
+        
         <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5"  
                              IsReadOnly="True" 
                              Text="{Binding Command}"/>
