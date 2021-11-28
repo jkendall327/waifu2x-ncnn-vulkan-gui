@@ -1,19 +1,29 @@
+using System.Text;
+
 namespace Waifu2x_UI.Core;
 
 public class Command
 {
+    public Command(string inputImagePath, string outputImagePath)
+    {
+        InputImagePath = inputImagePath;
+        OutputImagePath = outputImagePath;
+    }
+
     internal string GetArguments()
     {
-        var cmd = string.Empty;
-        // query flags...
-        
-        var escapedArgs = cmd.Replace("\"", "\\\"");
+        var command = new StringBuilder();
 
-        return $"-c \"{escapedArgs}\"";
+        command.Append($" -i {InputImagePath}");
+        command.Append($" -o {OutputImagePath}");
+        
+        //var escapedArgs = cmd.Replace("\"", "\\\"");
+        //return $"-c \"{escapedArgs}\"";
+
+        return command.ToString();
     }
 
     public bool Verbose { get; set; }
-    public string InputImagePath { get; set; }
-    public string OutputImagePath { get; set; }
-    public Flags Flags { get; } = new();
+    private string InputImagePath { get; }
+    private string OutputImagePath { get; }
 }

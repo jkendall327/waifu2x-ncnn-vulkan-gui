@@ -34,18 +34,23 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         private ReactiveCommand<Unit, Unit> CreateRunCommand()
         {
             var canExecute = this.WhenAnyValue(
-                viewModel => viewModel.Command, 
-                command => !string.IsNullOrEmpty(command));
+                vm => vm.ExecutablePicker.Content,
+                vm => vm.InputImagePicker.Content,
+                vm => vm.OutputImagePicker.Content,
+                (executable, input, output) =>
+                {
+                    return !string.IsNullOrEmpty(executable) &&
+                           !string.IsNullOrEmpty(input) &&
+                           !string.IsNullOrEmpty(output);
+                });
 
-            return ReactiveCommand.Create(Run, canExecute);
+            return ReactiveCommand.Create(Run);
         }
 
         private void Run()
         {
-            var command = new Command
+            var command = new Command(InputImagePicker.Content, OutputImagePicker.Content)
             {
-                InputImagePath = InputImagePicker.Content,
-                OutputImagePath = OutputImagePicker.Content,
                 Verbose = Verbose
             };
 

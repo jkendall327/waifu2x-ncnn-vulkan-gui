@@ -17,8 +17,8 @@ public class CommandRunner : ICommandRunner
     {
         var processStartInfo = new ProcessStartInfo
         {
-            FileName = _shellPath,
-            Arguments = GenerateArguments(waifu2XPath, command),
+            FileName = waifu2XPath,
+            Arguments = command.GetArguments(),
             RedirectStandardOutput = true,
             UseShellExecute = false,
             CreateNoWindow = true,
@@ -30,22 +30,11 @@ public class CommandRunner : ICommandRunner
         };
 
         process.Start();
-        
+
         var result = process.StandardOutput.ReadToEnd();
         
         process.WaitForExit();
-
+        
         return result;
-    }
-
-    private string GenerateArguments(string waifu2XPath, Command command)
-    {
-        var sb = new StringBuilder();
-
-        sb.Append(waifu2XPath);
-
-        sb.Append(command.GetArguments());
-
-        return sb.ToString();
     }
 }
