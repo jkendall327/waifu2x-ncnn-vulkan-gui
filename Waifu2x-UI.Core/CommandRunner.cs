@@ -1,23 +1,16 @@
 using System.Diagnostics;
-using System.Text;
 
 namespace Waifu2x_UI.Core;
 
 public class CommandRunner : ICommandRunner
 {
-    private readonly string _shellPath = "/bin/bash";
-
-    public CommandRunner(string? shellPath = null)
+    public string Run(Command command)
     {
-        if (shellPath is null) return;
-        _shellPath = shellPath;
-    }
-
-    public string Run(string waifu2XPath, Command command)
-    {
+        var waifuPath = GetWaifu();
+        
         var processStartInfo = new ProcessStartInfo
         {
-            FileName = waifu2XPath,
+            FileName = waifuPath,
             Arguments = command.GetArguments(),
             RedirectStandardOutput = true,
             UseShellExecute = false,
@@ -36,5 +29,16 @@ public class CommandRunner : ICommandRunner
         process.WaitForExit();
         
         return result;
+    }
+
+    private string GetWaifu()
+    {
+        var parent = Directory.GetParent(Directory.GetCurrentDirectory()) ?? throw new DirectoryNotFoundException();
+
+        var waifu = new DirectoryInfo(parent.FullName + "waifu2x");
+        
+        var file = waifu.EnumerateFiles().FirstOrDefault(x => x.Name is "waifu2x-ncnn-vulkan");
+
+        return file?.FullName ?? throw new FileNotFoundException("Waifu2x executable not found!");
     }
 }

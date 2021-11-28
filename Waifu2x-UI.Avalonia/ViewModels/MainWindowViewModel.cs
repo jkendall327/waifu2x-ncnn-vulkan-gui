@@ -8,8 +8,6 @@ namespace Waifu2x_UI.Avalonia.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly ICommandRunner _runner;
-
-        public FilePickerViewModel ExecutablePicker { get; }
         public FilePickerViewModel InputImagePicker { get; }
         public FilePickerViewModel OutputImagePicker { get; }
         
@@ -17,7 +15,6 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         [Reactive] public bool Verbose { get; set; }
         
         public ReactiveCommand<Unit, Unit> RunCommand { get; }
-        public Interaction<Unit, string?> OpenFindExecutableDialog { get; } = new();
         public Interaction<Unit, string?> FindImageDialog { get; } = new();
         
         public MainWindowViewModel(ICommandRunner runner)
@@ -26,7 +23,6 @@ namespace Waifu2x_UI.Avalonia.ViewModels
             
             RunCommand = CreateRunCommand();
             
-            ExecutablePicker = new("Please select your Waifu2x executable", OpenFindExecutableDialog);
             InputImagePicker = new("Please select your input image", FindImageDialog);
             OutputImagePicker = new("Please select where the output will be placed", FindImageDialog);
         }
@@ -34,13 +30,11 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         private ReactiveCommand<Unit, Unit> CreateRunCommand()
         {
             var canExecute = this.WhenAnyValue(
-                vm => vm.ExecutablePicker.Content,
                 vm => vm.InputImagePicker.Content,
                 vm => vm.OutputImagePicker.Content,
-                (executable, input, output) =>
+                (input, output) =>
                 {
-                    return !string.IsNullOrEmpty(executable) &&
-                           !string.IsNullOrEmpty(input) &&
+                    return !string.IsNullOrEmpty(input) &&
                            !string.IsNullOrEmpty(output);
                 });
 
@@ -54,7 +48,7 @@ namespace Waifu2x_UI.Avalonia.ViewModels
                 Verbose = Verbose
             };
 
-            var output = _runner.Run(ExecutablePicker.Content, command);
+            var output = _runner.Run(command);
         }
     }
 }

@@ -24,7 +24,6 @@
             HorizontalAlignment="Left" 
             VerticalAlignment="Center"/>
         
-        <views:FilePicker Grid.Row="1" Grid.Column="0" DataContext="{Binding ExecutablePicker}"/>
         <views:FilePicker Grid.Row="2" Grid.Column="0" DataContext="{Binding InputImagePicker}"/>
         <views:FilePicker Grid.Row="3" Grid.Column="0" DataContext="{Binding OutputImagePicker}"/>
         
