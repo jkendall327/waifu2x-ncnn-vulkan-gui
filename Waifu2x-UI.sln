@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Waifu2x-UI.Avalonia", "Waifu2x-UI.Avalonia\Waifu2x-UI.Avalonia.csproj", "{92BDB8CB-A9BD-4C0B-AD86-8DB821719B75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Waifu2x-UI.Core", "Waifu2x-UI.Core\Waifu2x-UI.Core.csproj", "{B3AAFF00-9422-456E-8A19-CDACCF827051}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Waifu2x-UI.Tests", "Waifu2x-UI.Tests\Waifu2x-UI.Tests.csproj", "{BD38395E-67BB-45E8-95A4-CBD37F7F690F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92BDB8CB-A9BD-4C0B-AD86-8DB821719B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92BDB8CB-A9BD-4C0B-AD86-8DB821719B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92BDB8CB-A9BD-4C0B-AD86-8DB821719B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92BDB8CB-A9BD-4C0B-AD86-8DB821719B75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3AAFF00-9422-456E-8A19-CDACCF827051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3AAFF00-9422-456E-8A19-CDACCF827051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3AAFF00-9422-456E-8A19-CDACCF827051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3AAFF00-9422-456E-8A19-CDACCF827051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD38395E-67BB-45E8-95A4-CBD37F7F690F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD38395E-67BB-45E8-95A4-CBD37F7F690F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD38395E-67BB-45E8-95A4-CBD37F7F690F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD38395E-67BB-45E8-95A4-CBD37F7F690F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
