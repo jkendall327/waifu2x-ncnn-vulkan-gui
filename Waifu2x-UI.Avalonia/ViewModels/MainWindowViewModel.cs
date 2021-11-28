@@ -34,6 +34,19 @@ namespace Waifu2x_UI.Avalonia.ViewModels
             OutputImagePicker = new("Set output directory...", FindImageDialog);
         }
 
+        private void SetUpCommandPreview()
+        {
+            var command = new Command();
+            
+            // set this up to update preview bar when anything changes...
+            
+            var changes = this.WhenAnyValue(
+                x => x.InputImagePicker.Content,
+                u => u.OutputImagePicker.Content,
+                z => z.Verbose,
+                ((s, s1, arg3) => command.GetArguments()));
+        }
+        
         private ReactiveCommand<Unit, Unit> CreateRunCommand()
         {
             var canExecute = this.WhenAnyValue(

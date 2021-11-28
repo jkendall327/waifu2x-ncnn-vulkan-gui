@@ -10,7 +10,7 @@ public class Command
         OutputImagePath = outputImagePath;
     }
 
-    internal string GetArguments()
+    public string GetArguments()
     {
         var command = new StringBuilder();
 
