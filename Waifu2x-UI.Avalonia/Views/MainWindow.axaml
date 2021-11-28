@@ -34,7 +34,7 @@
                  MaxWidth="500"
                  IsReadOnly="True" 
                  Text="{Binding ExecutableFilepath}"
-                 Watermark="{Binding SelectExecutablePrompt}"/>
+                 Watermark="Please select your Waifu2X executable."/>
         
         <TextBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" 
                  IsReadOnly="True" 
