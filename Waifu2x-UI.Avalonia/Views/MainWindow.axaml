@@ -12,6 +12,30 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Grid ColumnDefinitions="*, *, *" RowDefinitions="*, *, *">
+        <TextBlock Text="{Binding Greeting}" 
+                   HorizontalAlignment="Left" 
+                   VerticalAlignment="Center"/>
+        
+        <TextBlock Grid.Row="1" Grid.Column="1" 
+            Text="{Binding SelectExecutablePrompt}"/>
+        
+        <Button Grid.Row="2" Grid.Column="1"
+            Content="Open"
+            Command="{Binding PickExecutableCommand}"/>
+        
+        <TextBox Grid.Row="2" Grid.Column="2" 
+                 IsReadOnly="True" 
+                 Text="{Binding ExecutableFilepath}"/>
+        
+        <TextBox Grid.Row="1" 
+                 IsReadOnly="True" 
+                 Text="{Binding CurrentCommand}"/>
+        
+        <Button Grid.Row="2"
+            Content="Run" 
+                Command="{Binding RunCommandCommand}"/>
+        
+    </Grid>
 
 </Window>
