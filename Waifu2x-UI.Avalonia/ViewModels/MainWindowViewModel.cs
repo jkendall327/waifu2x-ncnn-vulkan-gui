@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reactive;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using ReactiveUI;
 
 namespace Waifu2x_UI.Avalonia.ViewModels
@@ -32,6 +34,8 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         
         public ReactiveCommand<Unit, Unit> RunCommandCommand { get; }
         public ReactiveCommand<Unit, Unit> PickExecutableCommand { get; }
+        
+        public Interaction<Unit, string?> OpenFindExecutableDialog { get; } = new();
 
         public MainWindowViewModel()
         {
@@ -40,7 +44,7 @@ namespace Waifu2x_UI.Avalonia.ViewModels
             var canExecute = StringHasValue(x => x._currentCommand);
             
             RunCommandCommand = ReactiveCommand.Create(RunCommand, canExecute);
-            PickExecutableCommand = ReactiveCommand.Create(PickExecutable);
+            PickExecutableCommand = ReactiveCommand.CreateFromTask(PickExecutable);
         }
 
         private IObservable<bool> GetCanExecute()
@@ -74,9 +78,11 @@ namespace Waifu2x_UI.Avalonia.ViewModels
             var command = CurrentCommand;
         }
 
-        private void PickExecutable()
+        private async Task PickExecutable()
         {
-            ExecutableFilepath = "lol";
+            var result = await OpenFindExecutableDialog.Handle(Unit.Default);
+
+            ExecutableFilepath = result ?? string.Empty;
         }
     }
 }
