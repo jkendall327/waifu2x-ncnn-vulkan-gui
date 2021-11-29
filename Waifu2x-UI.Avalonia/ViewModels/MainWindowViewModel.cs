@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Reactive;
 using ReactiveUI;
 using Waifu2x_UI.Core;
@@ -33,20 +35,15 @@ namespace Waifu2x_UI.Avalonia.ViewModels
             
             RunCommand = CreateRunCommand();
 
-            LinkInputToCommand();
+            InputImagePicker.Files.CollectionChanged += FilesOnCollectionChanged;
             LinkOutputToCommand();
         }
 
-        private void LinkInputToCommand()
+        private void FilesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            var observer = Observer.Create<List<FileInfo>>(input =>
-            {
-                Command.InputImages = input;
-            });
-
-            this.WhenAnyValue(viewModel => viewModel.InputImagePicker.Files).Subscribe(observer);
+            Command.InputImages = InputImagePicker.Files.ToList();
         }
-        
+
         private void LinkOutputToCommand()
         {
             var observer = Observer.Create<DirectoryInfo?>(input =>

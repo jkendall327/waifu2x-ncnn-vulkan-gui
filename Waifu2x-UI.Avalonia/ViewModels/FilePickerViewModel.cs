@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -13,7 +14,7 @@ public class FilePickerViewModel : ViewModelBase
     [Reactive] public string Watermark { get; set; }
     [Reactive] public string Content { get; set; } = string.Empty;
 
-    public List<FileInfo> Files { get; set; } = new();
+    public ObservableCollection<FileInfo> Files { get; set; } = new();
     
     private ReactiveCommand<Unit, Unit> OpenDialogCommand { get; }
 
@@ -25,7 +26,14 @@ public class FilePickerViewModel : ViewModelBase
         {
             var result = await dialogInteraction.Handle(Unit.Default);
 
-            Files = result.Select(x => new FileInfo(x)).ToList();
+            var files = result.Select(x => new FileInfo(x)).ToList();
+            
+            Files.Clear();
+
+            foreach (var file in files)
+            {
+                Files.Add(file);
+            }
             
             Content = string.Join(", ", Files.Select(x => x.Name));
         });
