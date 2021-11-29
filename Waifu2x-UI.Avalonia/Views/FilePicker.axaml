@@ -10,15 +10,30 @@
         <viewModels:FilePickerViewModel/>
     </Design.DataContext>
     
-    <Grid ColumnDefinitions="*, 3*">
-        <Button Grid.Column="0"
-                Content="Open"
-                Command="{Binding OpenDialogCommand}"/>
+    <Border>
         
-        <TextBox Grid.Column="1" 
-                 IsReadOnly="True" 
-                 Text="{Binding Content}"
-                 Watermark="{Binding Watermark}"/>
-    </Grid>
+        <Border.BorderBrush>
+            <SolidColorBrush Color="Gray"/>
+        </Border.BorderBrush>
+
+        <Border.BorderThickness>1</Border.BorderThickness>
+        
+        <Border.CornerRadius>5</Border.CornerRadius>
+        
+        <Border.Padding>5</Border.Padding>
+        
+        <Grid ColumnDefinitions="auto, *">
+            <Button Grid.Column="0"
+                    Margin="0 0 10 0"
+                    Content="Open"
+                    Command="{Binding OpenDialogCommand}"/>
+        
+            <TextBox Grid.Column="1" 
+                     IsReadOnly="True" 
+                     Text="{Binding Content}"
+                     Watermark="{Binding Watermark}"/>
+        </Grid>
+    </Border>
+
     
 </UserControl>
