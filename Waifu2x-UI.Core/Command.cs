@@ -7,6 +7,11 @@ namespace Waifu2x_UI.Core;
 
 public class Command : ReactiveObject
 {
+    public Command()
+    {
+        SetupCommandPreview();
+    }
+    
     private void SetupCommandPreview()
     {
         var livePreview = this.WhenAnyValue(
@@ -28,6 +33,13 @@ public class Command : ReactiveObject
     public string GetArguments()
     {
         var command = new StringBuilder();
+
+        command.Append("waifu-2x-ncnn-vulkan");
+        
+        if (string.IsNullOrEmpty(InputImagePath) || string.IsNullOrEmpty(OutputImagePath))
+        {
+            return command.ToString();
+        }
 
         command.Append($" -input-path {InputImagePath}");
         command.Append($" -output-path {GetOutput()}");
