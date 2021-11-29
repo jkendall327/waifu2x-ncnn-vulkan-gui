@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:Waifu2xUI.Avalonia.Views"
         xmlns:converters="clr-namespace:Waifu2xUI.Avalonia.Converters"
+        xmlns:other="clr-namespace:Waifu2xUI.Avalonia.Other"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Waifu2xUI.Avalonia.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -22,6 +23,17 @@
     </Window.Resources>
     
     <Window.Padding>10</Window.Padding>
+    
+    <Window.Styles>
+        <Style Selector="ProgressBar">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="(other:ProgressBarWorkaround.Value)"
+                                      Duration="0:0:0.5"/>
+                </Transitions>
+            </Setter>
+        </Style>
+    </Window.Styles>
     
     <Grid ColumnDefinitions="auto, 2*, auto, *, auto" 
           RowDefinitions="auto, auto, auto, auto, auto, *, auto">
@@ -57,7 +69,7 @@
         <ProgressBar Grid.Row="4" Grid.Column="1"
                      Margin="15"
                      Height="30"
-                     Value="{Binding Progress}"/>
+                     other:ProgressBarWorkaround.Value="{Binding Progress}"/>
         
         <TextBox Grid.Row="5" Grid.Column="1"
                  Margin="10"
