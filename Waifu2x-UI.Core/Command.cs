@@ -19,8 +19,11 @@ public class Command : ReactiveObject
             x => x.OutputImagePath,
             x => x.Suffix,
             x => x.Verbose,
+            x => x.TTA,
+            x => x.ScaleFactor,
+            x => x.Denoise,
             x => x.OutputFileType,
-            (x, y, z, q, t) => GetArguments());
+            (x, y, z, q, t, a, b, c) => GetArguments());
 
         var observer = Observer.Create<string>(
             x => Preview = x,
@@ -42,14 +45,17 @@ public class Command : ReactiveObject
         }
 
         command.Append($" -input-path {InputImagePath}");
+        
         command.Append($" -output-path {GetOutput()}");
-
         command.Append($" -format {OutputFileType.ToExtension()}");
 
-        if (Verbose)
-        {
-            command.Append(" -verbose");
-        }
+        if (Denoise is not 0) command.Append($" -noise-level {Denoise}");
+
+        if (ScaleFactor is not 2) command.Append($" -scale {ScaleFactor}");
+
+        if (Verbose) command.Append(" -verbose");
+
+        if (TTA) command.Append(" -x");
 
         return command.ToString();
     }
@@ -59,7 +65,7 @@ public class Command : ReactiveObject
     [Reactive] public string Preview { get; private set; } = string.Empty;
     
     // Image quality
-    [Reactive] public int ScaleFactor { get; set; }
+    [Reactive] public int ScaleFactor { get; set; } = 2;
     [Reactive] public int Denoise { get; set; }
     
     // Output
