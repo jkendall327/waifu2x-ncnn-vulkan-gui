@@ -41,7 +41,7 @@ public class Command : ReactiveObject
 
         command.Append("waifu-2x-ncnn-vulkan");
         
-        command.Append($" -input-path \"{file.FullName}\"");
+        command.Append($" -i {file.FullName}");
 
         AppendOutputPath(command, file);
         
@@ -80,20 +80,18 @@ public class Command : ReactiveObject
 
     private void AppendFlags(StringBuilder command)
     {
-        if (Denoise is not 0) command.Append($" -noise-level {Denoise}");
+        if (Denoise is not 0) command.Append($" -n {Denoise}");
 
-        if (ScaleFactor is not 2) command.Append($" -scale {ScaleFactor}");
+        if (ScaleFactor is not 2) command.Append($" -s {ScaleFactor}");
 
-        if (Verbose) command.Append(" -verbose");
+        if (Verbose) command.Append(" -v");
 
         if (TTA) command.Append(" -x");
     }
 
     private void AppendOutputPath(StringBuilder command, FileInfo file)
     {
-        command.Append($" -output-path ");
-
-        command.Append('"');
+        command.Append($" -o ");
         
         command.Append(OutputDirectory.FullName);
 
@@ -109,8 +107,6 @@ public class Command : ReactiveObject
         
         command.Append(OutputFileType.ToExtension());
         
-        command.Append('"');
-
         command.Append($" -format {OutputFileType.ToExtension()}");
     }
 
