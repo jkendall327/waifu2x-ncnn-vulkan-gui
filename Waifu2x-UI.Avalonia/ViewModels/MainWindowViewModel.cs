@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reactive;
+﻿using System.Reactive;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Waifu2x_UI.Core;
@@ -8,23 +7,26 @@ namespace Waifu2x_UI.Avalonia.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        // Services
         private readonly ICommandRunner _runner;
+        
+        // Viewmodels
         public FilePickerViewModel InputImagePicker { get; }
         public FilePickerViewModel OutputImagePicker { get; }
         
-        [Reactive] public string Command { get; set; } = string.Empty;
+        // Flags
         [Reactive] public string Suffix { get; set; } = "-upscaled";
         [Reactive] public bool Verbose { get; set; } = true;
-        
+        [Reactive] public bool PngOutput { get; set; } = true;
+
+        // Commands and interactions
         public ReactiveCommand<Unit, Unit> RunCommand { get; }
         public Interaction<Unit, string[]> FindImageDialog { get; } = new();
 
-        /// <summary>
-        /// If this is false, then use JPG
-        /// </summary>
-        [Reactive]
-        public bool PngOutput { get; set; } = true;
+        // UI display
+        [Reactive] public string Command { get; set; } = string.Empty;
 
+        // Models
         private readonly Command _command = new();
         
         public MainWindowViewModel(ICommandRunner runner)
@@ -39,14 +41,15 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         
         private ReactiveCommand<Unit, Unit> CreateRunCommand()
         {
+            bool Selector(string input, string output)
+            {
+                return !string.IsNullOrEmpty(input) && !string.IsNullOrEmpty(output);
+            }
+
             var canExecute = this.WhenAnyValue(
                 vm => vm.InputImagePicker.Content,
                 vm => vm.OutputImagePicker.Content,
-                (input, output) =>
-                {
-                    return !string.IsNullOrEmpty(input) &&
-                           !string.IsNullOrEmpty(output);
-                });
+                Selector);
 
             return ReactiveCommand.Create(Run);
         }
