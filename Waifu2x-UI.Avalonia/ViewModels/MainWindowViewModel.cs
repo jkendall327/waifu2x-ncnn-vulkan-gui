@@ -70,7 +70,8 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         {
             _command.InputImagePath = InputImagePicker.Content;
             _command.OutputImagePath = OutputImagePicker.Content;
-            
+
+            _command.Suffix = Suffix;
             _command.Verbose = Verbose;
             _command.OutputFileType = PngOutput ? OutputFileType.Png : OutputFileType.Jpeg;
 

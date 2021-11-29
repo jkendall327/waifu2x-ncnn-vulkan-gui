@@ -20,7 +20,7 @@ public class Command
         var command = new StringBuilder();
 
         command.Append($" -input-path {InputImagePath}");
-        command.Append($" -output-path {OutputImagePath}.{OutputFileType.ToExtension()}");
+        command.Append($" -output-path {GetOutput()}");
 
         command.Append($" -format {OutputFileType.ToExtension()}");
 
@@ -32,7 +32,9 @@ public class Command
         return command.ToString();
     }
 
+    private string GetOutput() => $"{OutputImagePath}{Suffix ?? string.Empty}.{OutputFileType.ToExtension()}";
 
+    public string? Suffix { get; set; }
     public OutputFileType OutputFileType { get; set; } = OutputFileType.Png;
     public bool Verbose { get; set; } = true;
     public string? InputImagePath { get; set; }
