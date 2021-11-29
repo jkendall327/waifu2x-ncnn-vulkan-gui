@@ -96,10 +96,14 @@ public class Command : ReactiveObject
         
         sb.Append(OutputDirectory.FullName);
 
+        sb.Append(Path.DirectorySeparatorChar);
+        
         sb.Append(InputImages.Count is 1 ? InputImages.First().Name : "[image]");
 
         if (!string.IsNullOrEmpty(Suffix)) sb.Append(Suffix);
 
+        sb.Append('.');
+        
         sb.Append(OutputFileType.ToExtension());
         
         return sb.ToString();

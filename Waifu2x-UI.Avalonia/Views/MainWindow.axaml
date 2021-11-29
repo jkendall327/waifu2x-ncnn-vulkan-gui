@@ -115,6 +115,10 @@
         
         <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="5"  
                  IsReadOnly="True" 
+                 VerticalContentAlignment="Center"
+                 CanCopy="True"
+                 
+                 
                  Text="{Binding Command.Preview}"/>
         
         <Button Grid.Row="7" Grid.Column="5"  
