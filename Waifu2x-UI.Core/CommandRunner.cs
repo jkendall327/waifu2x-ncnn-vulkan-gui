@@ -4,19 +4,33 @@ namespace Waifu2x_UI.Core;
 
 public class CommandRunner : ICommandRunner
 {
-    public string Run(Command command)
+    private readonly string _waifuPath;
+
+    public CommandRunner()
     {
-        var waifuPath = GetWaifu();
-        
+        _waifuPath = GetWaifu();
+    }
+    
+    public List<string> Run(Command command)
+    {
+        var files = command.InputImages;
+
+        var output = files.Select(file => SpawnProcess(command, file)).ToList();
+
+        return output;
+    }
+
+    private string SpawnProcess(Command command, FileInfo file)
+    {
         var processStartInfo = new ProcessStartInfo
         {
-            FileName = waifuPath,
-            Arguments = command.GetPreview(),
+            FileName = _waifuPath,
+            Arguments = command.GenerateArguments(file),
             RedirectStandardOutput = true,
             UseShellExecute = false,
             CreateNoWindow = true,
         };
-        
+
         var process = new Process
         {
             StartInfo = processStartInfo
@@ -25,9 +39,9 @@ public class CommandRunner : ICommandRunner
         process.Start();
 
         var result = process.StandardOutput.ReadToEnd();
-        
+
         process.WaitForExit();
-        
+
         return result;
     }
 
@@ -35,7 +49,7 @@ public class CommandRunner : ICommandRunner
     {
         var parent = Directory.GetParent(Directory.GetCurrentDirectory()) ?? throw new DirectoryNotFoundException();
 
-        var waifu = new DirectoryInfo(parent.FullName + "waifu2x");
+        var waifu = new DirectoryInfo(parent.FullName + Path.DirectorySeparatorChar + "waifu2x");
         
         var file = waifu.EnumerateFiles().FirstOrDefault(x => x.Name is "waifu2x-ncnn-vulkan");
 

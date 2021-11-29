@@ -35,6 +35,19 @@ public class Command : ReactiveObject
 
         livePreview.Subscribe(observer);
     }
+
+    public string GenerateArguments(FileInfo file)
+    {
+        var command = new StringBuilder();
+
+        command.Append("waifu-2x-ncnn-vulkan");
+        
+        command.Append($" -input-path {file.FullName}");
+
+        AppendFlags(command);
+
+        return command.ToString();
+    }
     
     public string GetPreview()
     {
@@ -55,7 +68,14 @@ public class Command : ReactiveObject
         {
             command.Append(" -input-path [image]");
         }
-        
+
+        AppendFlags(command);
+
+        return command.ToString();
+    }
+
+    private StringBuilder AppendFlags(StringBuilder command)
+    {
         command.Append($" -output-path {GetOutputPath()}");
         command.Append($" -format {OutputFileType.ToExtension()}");
 
@@ -67,7 +87,7 @@ public class Command : ReactiveObject
 
         if (TTA) command.Append(" -x");
 
-        return command.ToString();
+        return command;
     }
 
     private string GetOutputPath()

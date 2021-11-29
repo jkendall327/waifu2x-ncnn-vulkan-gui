@@ -22,7 +22,7 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         public Interaction<Unit, DirectoryInfo> FindOutputDirectoryDialog { get; } = new();
         
         // Models
-        public Command Command { get; }= new();
+        public Command Command { get; } = new();
         
         public MainWindowViewModel(ICommandRunner runner)
         {
@@ -38,7 +38,10 @@ namespace Waifu2x_UI.Avalonia.ViewModels
 
         private void LinkInputToCommand()
         {
-            var observer = Observer.Create<List<FileInfo>>(input => { Command.InputImages = input; });
+            var observer = Observer.Create<List<FileInfo>>(input =>
+            {
+                Command.InputImages = input;
+            });
 
             this.WhenAnyValue(viewModel => viewModel.InputImagePicker.Files).Subscribe(observer);
         }
