@@ -99,7 +99,9 @@ public class Command : ReactiveObject
 
         command.Append(Path.DirectorySeparatorChar);
 
-        command.Append(file.Name);
+        var name = Path.GetFileNameWithoutExtension(file.Name);
+        
+        command.Append(name);
 
         if (!string.IsNullOrEmpty(Suffix)) command.Append(Suffix);
 
