@@ -41,8 +41,10 @@ public class Command : ReactiveObject
 
         command.Append("waifu-2x-ncnn-vulkan");
         
-        command.Append($" -input-path {file.FullName}");
+        command.Append($" -input-path \"{file.FullName}\"");
 
+        AppendOutputPath(command, file);
+        
         AppendFlags(command);
 
         return command.ToString();
@@ -68,6 +70,9 @@ public class Command : ReactiveObject
             command.Append(" -input-path [image]");
         }
 
+        command.Append($" -output-path {GetPreviewOutputPath()}");
+        command.Append($" -format {OutputFileType.ToExtension()}");
+
         AppendFlags(command);
 
         return command.ToString();
@@ -75,9 +80,6 @@ public class Command : ReactiveObject
 
     private void AppendFlags(StringBuilder command)
     {
-        command.Append($" -output-path {GetOutputPath()}");
-        command.Append($" -format {OutputFileType.ToExtension()}");
-
         if (Denoise is not 0) command.Append($" -noise-level {Denoise}");
 
         if (ScaleFactor is not 2) command.Append($" -scale {ScaleFactor}");
@@ -87,7 +89,30 @@ public class Command : ReactiveObject
         if (TTA) command.Append(" -x");
     }
 
-    private string GetOutputPath()
+    private void AppendOutputPath(StringBuilder command, FileInfo file)
+    {
+        command.Append($" -output-path ");
+
+        command.Append('"');
+        
+        command.Append(OutputDirectory.FullName);
+
+        command.Append(Path.DirectorySeparatorChar);
+
+        command.Append(file.Name);
+
+        if (!string.IsNullOrEmpty(Suffix)) command.Append(Suffix);
+
+        command.Append('.');
+        
+        command.Append(OutputFileType.ToExtension());
+        
+        command.Append('"');
+
+        command.Append($" -format {OutputFileType.ToExtension()}");
+    }
+
+    private string GetPreviewOutputPath()
     {
         var sb = new StringBuilder();
         
