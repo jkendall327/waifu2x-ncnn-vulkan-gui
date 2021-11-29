@@ -25,8 +25,10 @@ public class App : Application
         var runner = new CommandRunner();
         var manager = new PreferencesManager(file);
 
-        var userData = await LoadUserData(manager);
+        //var userData = await LoadUserData(manager);
 
+        Command? userData = null;
+        
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
