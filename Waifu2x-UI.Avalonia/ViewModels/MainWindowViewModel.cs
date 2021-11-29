@@ -1,4 +1,5 @@
-﻿using System.Reactive;
+﻿using System;
+using System.Reactive;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Waifu2x_UI.Core;
@@ -24,6 +25,8 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         [Reactive]
         public bool PngOutput { get; set; } = true;
 
+        private readonly Command _command = new();
+        
         public MainWindowViewModel(ICommandRunner runner)
         {
             _runner = runner;
@@ -36,7 +39,9 @@ namespace Waifu2x_UI.Avalonia.ViewModels
 
         private void SetUpCommandPreview()
         {
-            var command = new Command();
+            throw new NotImplementedException();
+            
+            var command = new Command(string.Empty, string.Empty);
             
             // set this up to update preview bar when anything changes...
             
@@ -63,12 +68,13 @@ namespace Waifu2x_UI.Avalonia.ViewModels
 
         private void Run()
         {
-            var command = new Command(InputImagePicker.Content, OutputImagePicker.Content)
-            {
-                Verbose = Verbose
-            };
+            _command.InputImagePath = InputImagePicker.Content;
+            _command.OutputImagePath = OutputImagePicker.Content;
+            
+            _command.Verbose = Verbose;
+            _command.OutputFileType = PngOutput ? OutputFileType.Png : OutputFileType.Jpeg;
 
-            var output = _runner.Run(command);
+            var output = _runner.Run(_command);
         }
     }
 }

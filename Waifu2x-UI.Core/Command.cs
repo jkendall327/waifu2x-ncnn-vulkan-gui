@@ -10,20 +10,31 @@ public class Command
         OutputImagePath = outputImagePath;
     }
 
+    public Command()
+    {
+        
+    }
+
     public string GetArguments()
     {
         var command = new StringBuilder();
 
-        command.Append($" -i {InputImagePath}");
-        command.Append($" -o {OutputImagePath}");
-        
-        //var escapedArgs = cmd.Replace("\"", "\\\"");
-        //return $"-c \"{escapedArgs}\"";
+        command.Append($" -input-path {InputImagePath}");
+        command.Append($" -output-path {OutputImagePath}.{OutputFileType.ToExtension()}");
+
+        command.Append($" -format {OutputFileType.ToExtension()}");
+
+        if (Verbose)
+        {
+            command.Append(" -verbose");
+        }
 
         return command.ToString();
     }
 
-    public bool Verbose { get; set; }
-    private string InputImagePath { get; }
-    private string OutputImagePath { get; }
+
+    public OutputFileType OutputFileType { get; set; } = OutputFileType.Png;
+    public bool Verbose { get; set; } = true;
+    public string? InputImagePath { get; set; }
+    public string? OutputImagePath { get; set; }
 }
