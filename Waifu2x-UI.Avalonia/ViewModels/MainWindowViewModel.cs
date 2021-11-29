@@ -23,11 +23,23 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         public MainWindowViewModel(ICommandRunner runner)
         {
             _runner = runner;
-            
-            RunCommand = CreateRunCommand();
-            
+
             InputImagePicker = new("Select input...", FindImageDialog);
             OutputImagePicker = new("Set output directory...", FindImageDialog);
+            
+            RunCommand = CreateRunCommand();
+
+            this.WhenAnyValue(
+                    x => x.InputImagePicker.Content,
+                    y => y.OutputImagePicker.Content,
+                    (x, y) => (x, y))
+                .Subscribe(Observer.Create<(string, string)>(tuple =>
+                {
+                    var (input, output) = tuple;
+                    
+                    Command.InputImagePath = input;
+                    Command.OutputImagePath = output;
+                }));
         }
 
         private ReactiveCommand<Unit, Unit> CreateRunCommand()
@@ -42,7 +54,7 @@ namespace Waifu2x_UI.Avalonia.ViewModels
                 vm => vm.OutputImagePicker.Content,
                 Selector);
 
-            return ReactiveCommand.Create(Run);
+            return ReactiveCommand.Create(Run, canExecute);
         }
 
         private void Run()

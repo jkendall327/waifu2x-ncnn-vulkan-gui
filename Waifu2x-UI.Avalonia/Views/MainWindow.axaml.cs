@@ -31,19 +31,6 @@ namespace Waifu2x_UI.Avalonia.Views
             AvaloniaXamlLoader.Load(this);
         }
         
-        private async Task ShowDialogAsync(InteractionContext<Unit, string?> interaction)
-        {
-            var dialog = new OpenFileDialog
-            {
-                AllowMultiple = false,
-                Directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-            };
-
-            var result = await dialog.ShowAsync(this);
-            
-            interaction.SetOutput(result?.FirstOrDefault());
-        }
-        
         private async Task ShowImageDialogAsync(InteractionContext<Unit, string[]> interaction)
         {
             var dialog = new OpenFileDialog
