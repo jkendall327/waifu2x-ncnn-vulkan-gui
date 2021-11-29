@@ -24,27 +24,30 @@
     <Window.Padding>10</Window.Padding>
     
     <Grid ColumnDefinitions="auto, auto, auto, auto, *, auto" 
-          RowDefinitions="auto, auto, auto, auto, auto, auto *, auto">
+          RowDefinitions="auto, auto, auto, auto, *, *, *, *, auto">
         
         <TextBlock Grid.ColumnSpan="2" 
                    FontSize="40"
-            Padding="15"
-            Text="waifu2x ui" 
-            HorizontalAlignment="Left" 
-            VerticalAlignment="Center"/>
+                   Padding="15"
+                   Text="waifu2x ui" 
+                   HorizontalAlignment="Left" 
+                   VerticalAlignment="Center"/>
         
         <!-- Input/output -->
         
-        <views:FilePicker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+        <views:FilePicker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
                           Margin="5"
                           DataContext="{Binding InputImagePicker}"/>
         
-        <views:FilePicker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+        <views:FilePicker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
                           Margin="5"
                           DataContext="{Binding OutputDirectoryPicker}"/>
         
-        <TextBox Grid.Row="2" Grid.Column="2" 
-                 Margin="10 0 0 0"
+        <TextBlock Grid.Row="3" Grid.Column="0" 
+                   VerticalAlignment="Center"
+                   Text="Output file suffix"/>
+        
+        <TextBox Grid.Row="3" Grid.Column="1" 
                  MinWidth="150"
                  VerticalContentAlignment="Center"
                  Text="{Binding Command.Suffix}"
@@ -52,42 +55,43 @@
         
         <!-- Simple flags, checkboxes -->
         
-        <CheckBox Grid.Row="3" Grid.Column="0"
+        <CheckBox Grid.Row="4" Grid.Column="0"
                   Content="Verbose output" 
+                  VerticalContentAlignment="Center"
                   IsChecked="{Binding Command.Verbose}"/>
         
-        <CheckBox Grid.Row="3" Grid.Column="2"
+        <CheckBox Grid.Row="4" Grid.Column="2"
                   Margin="0 10"
                   Content="TTA"
                   IsChecked="{Binding Command.TTA}"/>
         
         <!-- Output formats-->
         
-        <TextBlock Grid.Row="4" Grid.Column="0" 
+        <TextBlock Grid.Row="5" Grid.Column="0" 
                    VerticalAlignment="Center"
                    Text="Output format"/>
         
-        <RadioButton Grid.Row="4" Grid.Column="1" 
+        <RadioButton Grid.Row="5" Grid.Column="1" 
                      Name="PngRadio"
                      Content="PNG"
                      IsChecked="{
                      Binding Command.OutputFileType, 
                      Converter={StaticResource EnumConverter}}"/>
         
-        <RadioButton Grid.Row="4" Grid.Column="2" 
+        <RadioButton Grid.Row="5" Grid.Column="2" 
                      Margin="0 10"
                      Content="JPG" 
                      IsChecked="{Binding !#PngRadio.IsChecked}"/>
         
         <!-- Comboboxes -->
         
-        <ComboBox Grid.Row="5" Grid.Column="0" PlaceholderText="Model" Margin="10">
+        <ComboBox Grid.Row="6" Grid.Column="0" PlaceholderText="Model" Margin="10">
             <ComboBoxItem>Model #1</ComboBoxItem>
             <ComboBoxItem>Model #2</ComboBoxItem>
             <ComboBoxItem>Model #3</ComboBoxItem>
         </ComboBox>
         
-        <ComboBox Grid.Row="5" Grid.Column="1" 
+        <ComboBox Grid.Row="6" Grid.Column="1" 
                   PlaceholderText="Denoise level" 
                   Margin="10"
                   SelectedItem="{
@@ -99,7 +103,7 @@
             <ComboBoxItem Content="3"/>
         </ComboBox>
 
-        <ComboBox Grid.Row="5" Grid.Column="2" 
+        <ComboBox Grid.Row="6" Grid.Column="2" 
                   PlaceholderText="Scale factor" 
                   Margin="10"
                   SelectedItem="{
@@ -113,11 +117,12 @@
         
         <!-- Bottom row with command representation and run button -->
         
-        <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="5"  
+        <TextBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="5"  
                  IsReadOnly="True" 
+                 VerticalContentAlignment="Center"
                  Text="{Binding Command.Preview}"/>
         
-        <Button Grid.Row="7" Grid.Column="5"  
+        <Button Grid.Row="8" Grid.Column="5"  
                 Margin="5"
                 Content="Run" 
                 Command="{Binding RunCommand}"/>

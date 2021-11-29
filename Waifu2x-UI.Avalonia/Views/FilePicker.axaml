@@ -10,16 +10,12 @@
         <viewModels:FilePickerViewModel/>
     </Design.DataContext>
     
-    <Grid ColumnDefinitions="3*, auto">
+    <Grid ColumnDefinitions="*, 3*">
         <Button Grid.Column="0"
-                Margin="5"
                 Content="Open"
                 Command="{Binding OpenDialogCommand}"/>
         
         <TextBox Grid.Column="1" 
-                 HorizontalAlignment="Stretch"
-                 VerticalContentAlignment="Center"
-                 MinWidth="200"
                  IsReadOnly="True" 
                  Text="{Binding Content}"
                  Watermark="{Binding Watermark}"/>
