@@ -10,8 +10,9 @@
         x:Class="Waifu2xUI.Avalonia.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="Waifu2x_UI.Avalonia"
-        MinWidth="1200"
-        MinHeight="400">
+        MinWidth="900"
+        MinHeight="600"
+        Width="900">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -25,7 +26,14 @@
     <Window.Padding>10</Window.Padding>
     
     <Window.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
         <Style Selector="ProgressBar">
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="Transitions">
                 <Transitions>
                     <DoubleTransition Property="(other:ProgressBarWorkaround.Value)"
@@ -35,59 +43,60 @@
         </Style>
     </Window.Styles>
     
-    <Grid ColumnDefinitions="auto, 2*, auto, *, auto" 
-          RowDefinitions="auto, auto, auto, auto, auto, *, auto">
+    <Grid RowDefinitions="auto, auto, auto, auto, auto, auto, *, auto">
         
-        <TextBlock Grid.ColumnSpan="2" 
-                   FontSize="40"
-                   Padding="15"
-                   Text="waifu2x ui" 
+        <TextBlock 
+                   FontSize="30"
+                   FontWeight="Bold"
+                   Text="waifu2x-nccn-vulkan" 
                    HorizontalAlignment="Left" 
                    VerticalAlignment="Center"/>
         
         <!-- Input/output -->
         
-        <views:FilePicker Grid.Row="1" Grid.Column="1"
-                          Margin="5"
+        <views:FilePicker Grid.Row="1" Margin="10"
                           DataContext="{Binding InputImagePicker}"/>
         
-        <views:FilePicker Grid.Row="2" Grid.Column="1"
-                          Margin="5"
+        <views:FilePicker Grid.Row="2" Margin="10"
                           DataContext="{Binding OutputDirectoryPicker}"/>
-        
-        <Grid Grid.Row="3" Grid.Column="1" ColumnDefinitions="auto, *" Margin="5 10 5 0">
+        <!-- Output -->
+        <Grid Grid.Row="3" ColumnDefinitions="auto, 2*, Auto, Auto, *, *, *" Margin="0 10">
+            
             <TextBlock
+                Margin="15 0 0 0"
                 VerticalAlignment="Center"
-                Text="Output file suffix:"/>
+                Text="Output file suffix"/>
         
-            <TextBox Grid.Column="1" Margin="10 0 0 0"
+            <TextBox Grid.Column="1"
                      VerticalContentAlignment="Center"
                      Text="{Binding Command.Suffix}"
                      Watermark="Enter suffixes for processed files here"/>
+            
+            <RadioButton Grid.Column="2" 
+                         Margin="15 0"
+                         Name="PngRadio"
+                         Content="PNG"
+                         IsChecked="{
+                     Binding Command.OutputFileType, 
+                     Converter={StaticResource EnumConverter}}"/>
+        
+            <RadioButton Grid.Column="3"
+                         Margin="15 0"
+                         Content="JPG" 
+                         IsChecked="{Binding !#PngRadio.IsChecked}"/>
+            
+            <CheckBox Grid.Column="5" 
+                      Margin="0 0 20 0"
+                      Content="Verbose"/>
+            
+            <CheckBox Grid.Column="6" 
+                      Content="TTA"/>
         </Grid>
         
-        <ProgressBar Grid.Row="4" Grid.Column="1"
-                     Margin="15"
-                     Height="30"
-                     other:ProgressBarWorkaround.Value="{Binding Progress}"/>
-        
-        <TextBox Grid.Row="5" Grid.Column="1"
-                 Margin="10"
-                 CornerRadius="8"
-                 IsReadOnly="True"
-                 Watermark="Terminal output..."
-                 Text="{Binding Report}"/>
-        
-        <Border Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="5">
-            
-            <Border.BorderThickness>2</Border.BorderThickness>
-            
+        <!-- Comboboxes -->
+        <Border Grid.Row="4" >
+            <Border.BorderThickness>0</Border.BorderThickness>
             <Border.CornerRadius>7</Border.CornerRadius>
-            
-            <Border.Padding>15</Border.Padding>
-            
-            <Border.Margin>5</Border.Margin>
-            
             <Border.BorderBrush>
                 <SolidColorBrush Color="Gray"/>
             </Border.BorderBrush>
@@ -95,8 +104,7 @@
             <Border.Styles>
                 <Style Selector="TextBlock">
                     <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="FontSize" Value="21"/>
-                    <Setter Property="Margin" Value="0 0 20 0"/>
+                    <Setter Property="Margin" Value="15 0"/>
                 </Style>
                 <Style Selector="TextBox">
                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -108,19 +116,19 @@
                 </Style>
             </Border.Styles>
             
-            <Grid ColumnDefinitions="auto, *" RowDefinitions="*, *, *, *, *">
+            <Grid ColumnDefinitions="*, auto, 5*, *, auto, 5*, *, auto, 5*, auto">
                 
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Model"/>
+                <TextBlock Grid.Column="1" Text="Model"/>
         
-                <ComboBox Grid.Row="0" Grid.Column="1">
+                <ComboBox Grid.Column="2">
                     <ComboBoxItem>Model #1</ComboBoxItem>
                     <ComboBoxItem>Model #2</ComboBoxItem>
                     <ComboBoxItem>Model #3</ComboBoxItem>
                 </ComboBox>
         
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Denoise level"/>
+                <TextBlock Grid.Column="4" Text="Denoise level"/>
 
-                <ComboBox Grid.Row="1" Grid.Column="1" 
+                <ComboBox Grid.Column="5" 
                           SelectedItem="{
                   Binding Command.Denoise, 
                   Converter={StaticResource ComboBoxToIntConverter}}">
@@ -130,9 +138,9 @@
                     <ComboBoxItem Content="3"/>
                 </ComboBox>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Scale factor"/>
+                <TextBlock Grid.Column="7" Text="Scale factor"/>
 
-                <ComboBox Grid.Row="2" Grid.Column="1" 
+                <ComboBox Grid.Column="8" 
                           SelectedItem="{
                   Binding Command.ScaleFactor,
                    Converter={StaticResource ComboBoxToIntConverter}}">
@@ -141,57 +149,35 @@
                     <ComboBoxItem Content="8"/>
                     <ComboBoxItem Content="16"/>
                 </ComboBox>
-                
-                <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="auto, *, *">
-            
-                    <TextBlock Grid.Column="0"
-                               VerticalAlignment="Center"
-                               Text="Flags:"/>
-            
-                    <CheckBox Grid.Column="1"
-                              Content="Verbose" 
-                              IsChecked="{Binding Command.Verbose}"/>
-        
-                    <CheckBox Grid.Column="2"
-                              Content="TTA"
-                              IsChecked="{Binding Command.TTA}"/>
-                </Grid>
-                
-                <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="auto, *, *, *">
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        Text="Output format:"/>
-        
-                    <RadioButton Grid.Column="1" 
-                                 Name="PngRadio"
-                                 Content="PNG"
-                                 IsChecked="{
-                     Binding Command.OutputFileType, 
-                     Converter={StaticResource EnumConverter}}"/>
-        
-                    <RadioButton Grid.Column="2"
-                                 Content="JPG" 
-                                 IsChecked="{Binding !#PngRadio.IsChecked}"/>
-
-                </Grid>
             </Grid>
         </Border>
-        
-        <!-- Bottom row with command representation and run button -->
-        
-        <TextBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" 
-                 Margin="0 10 0 0"
-                 IsReadOnly="True" 
-                 VerticalContentAlignment="Center"
-                 Text="{Binding Command.Preview}"/>
-        
-        <Button Grid.Row="6" Grid.Column="4" 
-                Margin="5 10 0 0"
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center"
-                Content="Run" 
-                Command="{Binding RunCommand}"/>
-        
-    </Grid>
 
+        <!-- Progress bar -->
+        <ProgressBar Grid.Row="5"
+                     Margin="10 15 10 10"
+                     Height="30"
+                     other:ProgressBarWorkaround.Value="{Binding Progress}"/>
+
+        <!-- Terminal -->
+        <TextBox Grid.Row="6"
+                 Margin="10"
+                 CornerRadius="8"
+                 IsReadOnly="True"
+                 Watermark="Terminal output..."
+                 Text="{Binding Report}"/>
+        
+        <!-- Command preview and run button -->
+        <Grid Grid.Row="7" ColumnDefinitions="*, auto">
+            <TextBox Grid.Column="0"
+                     IsReadOnly="True" 
+                     VerticalContentAlignment="Center"
+                     Text="{Binding Command.Preview}"/>
+        
+            <Button Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Content="Run" 
+                    Command="{Binding RunCommand}"/>
+        </Grid>
+    </Grid>
 </Window>
