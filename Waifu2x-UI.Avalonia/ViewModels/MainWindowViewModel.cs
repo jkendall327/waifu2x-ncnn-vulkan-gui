@@ -14,7 +14,7 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         
         // Viewmodels
         public FilePickerViewModel InputImagePicker { get; }
-        public DirectoryPickerViewModel OutputImagePicker { get; }
+        public DirectoryPickerViewModel OutputDirectoryPicker { get; }
 
         // Commands and interactions
         public ReactiveCommand<Unit, Unit> RunCommand { get; }
@@ -29,11 +29,12 @@ namespace Waifu2x_UI.Avalonia.ViewModels
             _runner = runner;
 
             InputImagePicker = new("Select input...", FindImageDialog);
-            OutputImagePicker = new("Set output directory...", FindOutputDirectoryDialog);
+            OutputDirectoryPicker = new("Set output directory...", FindOutputDirectoryDialog);
             
             RunCommand = CreateRunCommand();
 
             LinkInputToCommand();
+            LinkOutputToCommand();
         }
 
         private void LinkInputToCommand()
@@ -45,6 +46,17 @@ namespace Waifu2x_UI.Avalonia.ViewModels
 
             this.WhenAnyValue(viewModel => viewModel.InputImagePicker.Files).Subscribe(observer);
         }
+        
+        private void LinkOutputToCommand()
+        {
+            var observer = Observer.Create<DirectoryInfo?>(input =>
+            {
+                if (input is null) return;
+                Command.OutputDirectory = input;
+            });
+
+            this.WhenAnyValue(viewModel => viewModel.OutputDirectoryPicker.Directory).Subscribe(observer);
+        }
 
         private ReactiveCommand<Unit, Unit> CreateRunCommand()
         {
@@ -55,7 +67,7 @@ namespace Waifu2x_UI.Avalonia.ViewModels
 
             var canExecute = this.WhenAnyValue(
                 vm => vm.InputImagePicker.Content,
-                vm => vm.OutputImagePicker.Directory,
+                vm => vm.OutputDirectoryPicker.Directory,
                 Selector);
 
             return ReactiveCommand.Create(Run, canExecute);
