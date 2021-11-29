@@ -1,7 +1,5 @@
-﻿using System;
-using System.Reactive;
+﻿using System.Reactive;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Waifu2x_UI.Core;
 
 namespace Waifu2x_UI.Avalonia.ViewModels
@@ -14,48 +12,22 @@ namespace Waifu2x_UI.Avalonia.ViewModels
         // Viewmodels
         public FilePickerViewModel InputImagePicker { get; }
         public FilePickerViewModel OutputImagePicker { get; }
-        
-        // Flags
-        [Reactive] public string Suffix { get; set; } = "-upscaled";
-        [Reactive] public bool Verbose { get; set; } = true;
-        [Reactive] public bool PngOutput { get; set; } = true;
 
         // Commands and interactions
         public ReactiveCommand<Unit, Unit> RunCommand { get; }
         public Interaction<Unit, string[]> FindImageDialog { get; } = new();
-
-        // UI display
-        [Reactive] public string Command { get; set; } = string.Empty;
-
+        
         // Models
-        private readonly Command _command = new();
+        public Command Command { get; }= new();
         
         public MainWindowViewModel(ICommandRunner runner)
         {
             _runner = runner;
             
             RunCommand = CreateRunCommand();
-
-            SetupCommandPreview();
-
+            
             InputImagePicker = new("Select input...", FindImageDialog);
             OutputImagePicker = new("Set output directory...", FindImageDialog);
-        }
-
-        private void SetupCommandPreview()
-        {
-            var livePreview = this.WhenAnyValue(
-                x => x.Suffix,
-                x => x.Verbose,
-                x => x.PngOutput,
-                (x, y, z) => _command.GetArguments());
-
-            var observer = Observer.Create<string>(
-                x => Command = x,
-                y => Command = "Error occured when creating command preview",
-                () => throw new InvalidOperationException());
-
-            livePreview.Subscribe(observer);
         }
 
         private ReactiveCommand<Unit, Unit> CreateRunCommand()
@@ -75,14 +47,7 @@ namespace Waifu2x_UI.Avalonia.ViewModels
 
         private void Run()
         {
-            _command.InputImagePath = InputImagePicker.Content;
-            _command.OutputImagePath = OutputImagePicker.Content;
-
-            _command.Suffix = Suffix;
-            _command.Verbose = Verbose;
-            _command.OutputFileType = PngOutput ? OutputFileType.Png : OutputFileType.Jpeg;
-
-            var output = _runner.Run(_command);
+            var output = _runner.Run(Command);
         }
     }
 }

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:Waifu2x_UI.Avalonia.Views"
+        xmlns:converters="clr-namespace:Waifu2x_UI.Avalonia.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Waifu2x_UI.Avalonia.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -15,6 +16,11 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
+    <Window.Resources>
+        <converters:BoolToEnumConverter x:Key="EnumConverter"/>
+        <converters:ComboBoxToIntConverter x:Key="ComboBoxToIntConverter"/>
+    </Window.Resources>
+    
     <Window.Padding>10</Window.Padding>
     
     <Grid ColumnDefinitions="auto, auto, auto, auto, *, auto" 
@@ -41,19 +47,19 @@
                  Margin="10 0 0 0"
                  MinWidth="150"
                  VerticalContentAlignment="Center"
-                 Text="{Binding Suffix}"
+                 Text="{Binding Command.Suffix}"
                  Watermark="Enter suffixes for processed files here"/>
         
         <!-- Simple flags, checkboxes -->
         
         <CheckBox Grid.Row="3" Grid.Column="0"
                   Content="Verbose output" 
-                  IsChecked="{Binding Verbose}"/>
+                  IsChecked="{Binding Command.Verbose}"/>
         
         <CheckBox Grid.Row="3" Grid.Column="2"
                   Margin="0 10"
                   Content="TTA"
-                  IsChecked="False"/>
+                  IsChecked="{Binding Command.TTA}"/>
         
         <!-- Output formats-->
         
@@ -64,7 +70,9 @@
         <RadioButton Grid.Row="4" Grid.Column="1" 
                      Name="PngRadio"
                      Content="PNG"
-                     IsChecked="{Binding PngOutput}"/>
+                     IsChecked="{
+                     Binding Command.OutputFileType, 
+                     Converter={StaticResource EnumConverter}}"/>
         
         <RadioButton Grid.Row="4" Grid.Column="2" 
                      Margin="0 10"
@@ -79,25 +87,35 @@
             <ComboBoxItem>Model #3</ComboBoxItem>
         </ComboBox>
         
-        <ComboBox Grid.Row="5" Grid.Column="1" PlaceholderText="Denoise level" Margin="10">
-            <ComboBoxItem>0</ComboBoxItem>
-            <ComboBoxItem>1</ComboBoxItem>
-            <ComboBoxItem>2</ComboBoxItem>
-            <ComboBoxItem>3</ComboBoxItem>
+        <ComboBox Grid.Row="5" Grid.Column="1" 
+                  PlaceholderText="Denoise level" 
+                  Margin="10"
+                  SelectedItem="{
+                  Binding Command.Denoise, 
+                  Converter={StaticResource ComboBoxToIntConverter}}">
+            <ComboBoxItem Content="0"/>
+            <ComboBoxItem Content="1"/>
+            <ComboBoxItem Content="2"/>
+            <ComboBoxItem Content="3"/>
         </ComboBox>
 
-        <ComboBox Grid.Row="5" Grid.Column="2" PlaceholderText="Scale factor" Margin="10">
-            <ComboBoxItem>2</ComboBoxItem>
-            <ComboBoxItem>4</ComboBoxItem>
-            <ComboBoxItem>8</ComboBoxItem>
-            <ComboBoxItem>16</ComboBoxItem>
+        <ComboBox Grid.Row="5" Grid.Column="2" 
+                  PlaceholderText="Scale factor" 
+                  Margin="10"
+                  SelectedItem="{
+                  Binding Command.ScaleFactor,
+                   Converter={StaticResource ComboBoxToIntConverter}}">
+            <ComboBoxItem Content="2"/>
+            <ComboBoxItem Content="4"/>
+            <ComboBoxItem Content="8"/>
+            <ComboBoxItem Content="16"/>
         </ComboBox>
         
         <!-- Bottom row with command representation and run button -->
         
         <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="5"  
                  IsReadOnly="True" 
-                 Text="{Binding Command}"/>
+                 Text="{Binding Command.Preview}"/>
         
         <Button Grid.Row="7" Grid.Column="5"  
                 Margin="5"
