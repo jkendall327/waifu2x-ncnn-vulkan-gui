@@ -15,11 +15,16 @@ public class CommandRunner : ICommandRunner
     {
         var files = command.InputImages;
 
+        var total = files.Count;
+        var counter = 0;
+        
         foreach (var file in files)
         {
+            counter++;
+            
             var output = await SpawnProcess(command, file);
             
-            yield return output;
+            yield return $"({counter}/{total}) {output}";
         }
     }
 

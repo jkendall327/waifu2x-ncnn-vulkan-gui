@@ -79,10 +79,10 @@ public class MainWindowViewModel : ViewModelBase
     
     private async Task Run()
     {
-        await _preferencesManager.SavePreferences(Command);
-        
         Report = string.Empty;
 
+        await _preferencesManager.SavePreferences(Command);
+        
         await foreach (var log in _runner.Run(Command))
         {
             Report += log;
