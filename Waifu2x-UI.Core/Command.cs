@@ -10,20 +10,9 @@ public class Command : ReactiveObject
 {
     public Command()
     {
-        OutputDirectory = SetDefaultOutputDirectory();
+        OutputDirectory = DirectoryExtensions.GetOutputDirectory();
         
         SetupCommandPreview();
-    }
-
-    private DirectoryInfo SetDefaultOutputDirectory()
-    {
-        var fullPath = Path.GetFullPath(Directory.GetCurrentDirectory());
-        var separator = Path.DirectorySeparatorChar;
-
-        var path = $"{fullPath}{separator}output";
-        Directory.CreateDirectory(path);
-
-        return new(path);
     }
 
     private void SetupCommandPreview()
