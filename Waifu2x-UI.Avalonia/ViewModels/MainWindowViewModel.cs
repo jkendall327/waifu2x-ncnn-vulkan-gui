@@ -25,6 +25,11 @@ public class MainWindowViewModel : ViewModelBase
     public Interaction<Unit, string[]> FindImageDialog { get; } = new();
     public Interaction<Unit, DirectoryInfo> FindOutputDirectoryDialog { get; } = new();
         
+    // Bindings
+    [Reactive] public string Report { get; set; } = string.Empty;
+    
+    [Reactive] public double Progress { get; set; }
+    
     // Models
     public Command Command { get; }
         
@@ -74,18 +79,18 @@ public class MainWindowViewModel : ViewModelBase
 
         return ReactiveCommand.CreateFromTask(Run, canExecute);
     }
-
-    [Reactive] public string Report { get; set; } = string.Empty;
     
     private async Task Run()
     {
         Report = string.Empty;
+        Progress = 0;
 
         await _preferencesManager.SavePreferences(Command);
         
-        await foreach (var log in _runner.Run(Command))
+        await foreach (var (report, progress) in _runner.Run(Command))
         {
-            Report += log;
+            Report += report;
+            Progress = progress;
         }
     }
 }

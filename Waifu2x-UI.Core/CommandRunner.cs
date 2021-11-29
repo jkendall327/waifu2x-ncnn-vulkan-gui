@@ -11,7 +11,7 @@ public class CommandRunner : ICommandRunner
         _waifuPath = GetWaifu();
     }
     
-    public async IAsyncEnumerable<string> Run(Command command)
+    public async IAsyncEnumerable<(string, double)> Run(Command command)
     {
         var files = command.InputImages;
 
@@ -23,10 +23,16 @@ public class CommandRunner : ICommandRunner
             counter++;
             
             var output = await SpawnProcess(command, file);
+
+            var report = $"({counter}/{total}) {output}";
+
+            var percentage = CalculatePercentage(counter, total);
             
-            yield return $"({counter}/{total}) {output}";
+            yield return (report, percentage);
         }
     }
+
+    private double CalculatePercentage(int counter, int total) => (double)(counter * 100) / total;
 
     private async Task<string> SpawnProcess(Command command, FileInfo file)
     {

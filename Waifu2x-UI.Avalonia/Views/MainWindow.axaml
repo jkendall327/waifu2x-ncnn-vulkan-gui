@@ -56,7 +56,8 @@
         
         <ProgressBar Grid.Row="4" Grid.Column="1"
                      Margin="15"
-                     Height="30"/>
+                     Height="30"
+                     Value="{Binding Progress}"/>
         
         <TextBox Grid.Row="5" Grid.Column="1"
                  Margin="10"
