@@ -62,7 +62,8 @@
                  Margin="10"
                  CornerRadius="8"
                  IsReadOnly="True"
-                 Watermark="Terminal output..."/>
+                 Watermark="Terminal output..."
+                 Text="{Binding Report}"/>
         
         <Border Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="5">
             

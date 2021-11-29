@@ -11,16 +11,19 @@ public class CommandRunner : ICommandRunner
         _waifuPath = GetWaifu();
     }
     
-    public IEnumerable<string> Run(Command command)
+    public async IAsyncEnumerable<string> Run(Command command)
     {
         var files = command.InputImages;
 
-        var output = files.Select(file => SpawnProcess(command, file)).ToList();
-
-        return output;
+        foreach (var file in files)
+        {
+            var output = await SpawnProcess(command, file);
+            
+            yield return output;
+        }
     }
 
-    private string SpawnProcess(Command command, FileInfo file)
+    private async Task<string> SpawnProcess(Command command, FileInfo file)
     {
         var processStartInfo = new ProcessStartInfo
         {
@@ -38,9 +41,9 @@ public class CommandRunner : ICommandRunner
 
         process.Start();
 
-        var result = process.StandardOutput.ReadToEnd();
+        var result = await process.StandardOutput.ReadToEndAsync();
 
-        process.WaitForExit();
+        await process.WaitForExitAsync();
 
         return result;
     }

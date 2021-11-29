@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Waifu2x_UI.Core;
 
 namespace Waifu2xUI.Avalonia.ViewModels;
@@ -66,13 +68,18 @@ public class MainWindowViewModel : ViewModelBase
             vm => vm.OutputDirectoryPicker.Directory,
             Selector);
 
-        return ReactiveCommand.Create(Run, canExecute);
+        return ReactiveCommand.CreateFromTask(Run, canExecute);
     }
 
-    private void Run()
+    [Reactive] public string Report { get; set; } = string.Empty;
+    
+    private async Task Run()
     {
-        var output = _runner.Run(Command);
-        
-        Debug.Write(string.Join(',', output));
+        Report = string.Empty;
+
+        await foreach (var log in _runner.Run(Command))
+        {
+            Report += log;
+        }
     }
 }
