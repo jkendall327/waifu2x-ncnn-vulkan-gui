@@ -1,5 +1,6 @@
 using System.Reactive;
 using System.Text;
+using System.Text.Json.Serialization;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -141,9 +142,9 @@ public class Command : ReactiveObject
     
     // Other flags
     [Reactive] public bool Verbose { get; set; } = true;
-    [Reactive] public bool TTA { get; set; }
+    [Reactive] [JsonIgnore] public bool TTA { get; set; }
     
     // Paths
-    [Reactive] public List<FileInfo> InputImages { get; set; } = new();
-    [Reactive] public DirectoryInfo OutputDirectory { get; set; }
+    [Reactive] [JsonIgnore] public List<FileInfo> InputImages { get; set; } = new();
+    [Reactive] [JsonIgnore] public DirectoryInfo OutputDirectory { get; set; }
 }
