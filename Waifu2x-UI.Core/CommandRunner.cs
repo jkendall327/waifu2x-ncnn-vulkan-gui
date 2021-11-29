@@ -11,7 +11,7 @@ public class CommandRunner : ICommandRunner
         var processStartInfo = new ProcessStartInfo
         {
             FileName = waifuPath,
-            Arguments = command.GetArguments(),
+            Arguments = command.GetPreview(),
             RedirectStandardOutput = true,
             UseShellExecute = false,
             CreateNoWindow = true,

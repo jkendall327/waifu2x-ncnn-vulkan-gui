@@ -1,4 +1,7 @@
-﻿using System.Reactive;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.IO.Abstractions;
+using System.Reactive;
 using ReactiveUI;
 using Waifu2x_UI.Core;
 
@@ -29,17 +32,14 @@ namespace Waifu2x_UI.Avalonia.ViewModels
             
             RunCommand = CreateRunCommand();
 
-            this.WhenAnyValue(
-                    x => x.InputImagePicker.Content,
-                    y => y.OutputImagePicker.Content,
-                    (x, y) => (x, y))
-                .Subscribe(Observer.Create<(string, string)>(tuple =>
-                {
-                    var (input, output) = tuple;
-                    
-                    Command.InputImagePath = input;
-                    Command.OutputImagePath = output;
-                }));
+            LinkInputToCommand();
+        }
+
+        private void LinkInputToCommand()
+        {
+            var observer = Observer.Create<List<FileInfo>>(input => { Command.InputImages = input; });
+
+            this.WhenAnyValue(viewModel => viewModel.InputImagePicker.Files).Subscribe(observer);
         }
 
         private ReactiveCommand<Unit, Unit> CreateRunCommand()

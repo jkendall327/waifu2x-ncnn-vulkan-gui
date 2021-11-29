@@ -1,3 +1,4 @@
+using System.IO.Abstractions;
 using System.Reactive;
 using System.Text;
 using ReactiveUI;
@@ -9,21 +10,34 @@ public class Command : ReactiveObject
 {
     public Command()
     {
+        OutputDirectory = SetDefaultOutputDirectory();
+        
         SetupCommandPreview();
     }
-    
+
+    private DirectoryInfo SetDefaultOutputDirectory()
+    {
+        var fullPath = Path.GetFullPath(Directory.GetCurrentDirectory());
+        var separator = Path.DirectorySeparatorChar;
+
+        var path = $"{fullPath}{separator}output";
+        Directory.CreateDirectory(path);
+
+        return new(path);
+    }
+
     private void SetupCommandPreview()
     {
         var livePreview = this.WhenAnyValue(
-            x => x.InputImagePath,
-            x => x.OutputImagePath,
+            x => x.InputImages,
+            x => x.OutputDirectory,
             x => x.Suffix,
             x => x.Verbose,
             x => x.TTA,
             x => x.ScaleFactor,
             x => x.Denoise,
             x => x.OutputFileType,
-            (x, y, z, q, t, a, b, c) => GetArguments());
+            (x, y, z, q, t, a, b, c) => GetPreview());
 
         var observer = Observer.Create<string>(
             x => Preview = x,
@@ -33,20 +47,27 @@ public class Command : ReactiveObject
         livePreview.Subscribe(observer);
     }
     
-    public string GetArguments()
+    public string GetPreview()
     {
         var command = new StringBuilder();
 
         command.Append("waifu-2x-ncnn-vulkan");
         
-        if (string.IsNullOrEmpty(InputImagePath) || string.IsNullOrEmpty(OutputImagePath))
+        if (!InputImages.Any())
         {
             return command.ToString();
         }
 
-        command.Append($" -input-path {InputImagePath}");
+        if (InputImages.Count is 1)
+        {
+            command.Append($" -input-path {InputImages.First().FullName}");
+        }
+        else
+        {
+            command.Append(" -input-path [image]");
+        }
         
-        command.Append($" -output-path {GetOutput()}");
+        command.Append($" -output-path {GetOutputPath()}");
         command.Append($" -format {OutputFileType.ToExtension()}");
 
         if (Denoise is not 0) command.Append($" -noise-level {Denoise}");
@@ -60,7 +81,20 @@ public class Command : ReactiveObject
         return command.ToString();
     }
 
-    private string GetOutput() => $"{OutputImagePath}{Suffix ?? string.Empty}.{OutputFileType.ToExtension()}";
+    private string GetOutputPath()
+    {
+        var sb = new StringBuilder();
+        
+        sb.Append(OutputDirectory.FullName);
+
+        sb.Append(InputImages.Count is 1 ? InputImages.First().Name : "[image]");
+
+        if (!string.IsNullOrEmpty(Suffix)) sb.Append(Suffix);
+
+        sb.Append(OutputFileType.ToExtension());
+        
+        return sb.ToString();
+    }
 
     [Reactive] public string Preview { get; private set; } = string.Empty;
     
@@ -77,7 +111,6 @@ public class Command : ReactiveObject
     [Reactive] public bool TTA { get; set; }
     
     // Paths
-    [Reactive] public string? InputImagePath { get; set; }
-    [Reactive] public string? OutputImagePath { get; set; }
-
+    [Reactive] public List<FileInfo> InputImages { get; set; } = new();
+    [Reactive] public DirectoryInfo OutputDirectory { get; set; }
 }
