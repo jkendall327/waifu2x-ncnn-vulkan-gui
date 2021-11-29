@@ -1,78 +1,78 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
-using System.IO.Abstractions;
 using System.Linq;
 using System.Reactive;
 using ReactiveUI;
 using Waifu2x_UI.Core;
 
-namespace Waifu2x_UI.Avalonia.ViewModels
+namespace Waifu2xUI.Avalonia.ViewModels;
+
+public class MainWindowViewModel : ViewModelBase
 {
-    public class MainWindowViewModel : ViewModelBase
+    // Services
+    private readonly ICommandRunner _runner;
+        
+    // Viewmodels
+    public FilePickerViewModel InputImagePicker { get; }
+    public DirectoryPickerViewModel OutputDirectoryPicker { get; }
+
+    // Commands and interactions
+    public ReactiveCommand<Unit, Unit> RunCommand { get; }
+    public Interaction<Unit, string[]> FindImageDialog { get; } = new();
+    public Interaction<Unit, DirectoryInfo> FindOutputDirectoryDialog { get; } = new();
+        
+    // Models
+    public Command Command { get; } = new();
+        
+    public MainWindowViewModel(ICommandRunner runner)
     {
-        // Services
-        private readonly ICommandRunner _runner;
-        
-        // Viewmodels
-        public FilePickerViewModel InputImagePicker { get; }
-        public DirectoryPickerViewModel OutputDirectoryPicker { get; }
+        _runner = runner;
 
-        // Commands and interactions
-        public ReactiveCommand<Unit, Unit> RunCommand { get; }
-        public Interaction<Unit, string[]> FindImageDialog { get; } = new();
-        public Interaction<Unit, DirectoryInfo> FindOutputDirectoryDialog { get; } = new();
-        
-        // Models
-        public Command Command { get; } = new();
-        
-        public MainWindowViewModel(ICommandRunner runner)
-        {
-            _runner = runner;
-
-            InputImagePicker = new("Select input...", FindImageDialog);
-            OutputDirectoryPicker = new("Set output directory...", FindOutputDirectoryDialog);
+        InputImagePicker = new("Select input...", FindImageDialog);
+        OutputDirectoryPicker = new("Set output directory...", FindOutputDirectoryDialog);
             
-            RunCommand = CreateRunCommand();
+        RunCommand = CreateRunCommand();
 
-            InputImagePicker.Files.CollectionChanged += FilesOnCollectionChanged;
-            LinkOutputToCommand();
-        }
+        InputImagePicker.Files.CollectionChanged += FilesOnCollectionChanged;
+        LinkOutputToCommand();
+    }
 
-        private void FilesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void FilesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        Command.InputImages = InputImagePicker.Files.ToList();
+    }
+
+    private void LinkOutputToCommand()
+    {
+        var observer = Observer.Create<DirectoryInfo?>(input =>
         {
-            Command.InputImages = InputImagePicker.Files.ToList();
-        }
+            if (input is null) return;
+            Command.OutputDirectory = input;
+        });
 
-        private void LinkOutputToCommand()
+        this.WhenAnyValue(viewModel => viewModel.OutputDirectoryPicker.Directory).Subscribe(observer);
+    }
+
+    private ReactiveCommand<Unit, Unit> CreateRunCommand()
+    {
+        bool Selector(string input, DirectoryInfo? output)
         {
-            var observer = Observer.Create<DirectoryInfo?>(input =>
-            {
-                if (input is null) return;
-                Command.OutputDirectory = input;
-            });
-
-            this.WhenAnyValue(viewModel => viewModel.OutputDirectoryPicker.Directory).Subscribe(observer);
+            return !string.IsNullOrEmpty(input) && Directory.Exists(output?.FullName);
         }
 
-        private ReactiveCommand<Unit, Unit> CreateRunCommand()
-        {
-            bool Selector(string input, DirectoryInfo? output)
-            {
-                return !string.IsNullOrEmpty(input) && Directory.Exists(output?.FullName);
-            }
+        var canExecute = this.WhenAnyValue(
+            vm => vm.InputImagePicker.Content,
+            vm => vm.OutputDirectoryPicker.Directory,
+            Selector);
 
-            var canExecute = this.WhenAnyValue(
-                vm => vm.InputImagePicker.Content,
-                vm => vm.OutputDirectoryPicker.Directory,
-                Selector);
+        return ReactiveCommand.Create(Run, canExecute);
+    }
 
-            return ReactiveCommand.Create(Run, canExecute);
-        }
-
-        private void Run()
-        {
-            var output = _runner.Run(Command);
-        }
+    private void Run()
+    {
+        var output = _runner.Run(Command);
+        
+        Debug.Write(string.Join(',', output));
     }
 }

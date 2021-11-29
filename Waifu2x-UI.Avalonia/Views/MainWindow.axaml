@@ -1,12 +1,12 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:Waifu2x_UI.Avalonia.ViewModels"
+        xmlns:vm="using:Waifu2xUI.Avalonia.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:Waifu2x_UI.Avalonia.Views"
-        xmlns:converters="clr-namespace:Waifu2x_UI.Avalonia.Converters"
+        xmlns:views="clr-namespace:Waifu2xUI.Avalonia.Views"
+        xmlns:converters="clr-namespace:Waifu2xUI.Avalonia.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="Waifu2x_UI.Avalonia.Views.MainWindow"
+        x:Class="Waifu2xUI.Avalonia.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="Waifu2x_UI.Avalonia"
         MinWidth="600"
@@ -115,10 +115,6 @@
         
         <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="5"  
                  IsReadOnly="True" 
-                 VerticalContentAlignment="Center"
-                 CanCopy="True"
-                 
-                 
                  Text="{Binding Command.Preview}"/>
         
         <Button Grid.Row="7" Grid.Column="5"  

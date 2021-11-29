@@ -4,13 +4,13 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Waifu2x_UI.Avalonia.ViewModels;
+namespace Waifu2xUI.Avalonia.ViewModels;
 
 public class DirectoryPickerViewModel : ViewModelBase
 {
-    [Reactive] public string Watermark { get; set; }    
-    [Reactive] public string Content { get; set; } = string.Empty;
-    [Reactive] public DirectoryInfo? Directory { get; set; }
+    private string Watermark { get; }    
+    [Reactive] private string Content { get; set; } = string.Empty;
+    [Reactive] public DirectoryInfo? Directory { get; private set; }
     
     private ReactiveCommand<Unit, Unit> OpenDialogCommand { get; }
 

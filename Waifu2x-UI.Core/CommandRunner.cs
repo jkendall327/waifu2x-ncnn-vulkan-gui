@@ -11,7 +11,7 @@ public class CommandRunner : ICommandRunner
         _waifuPath = GetWaifu();
     }
     
-    public List<string> Run(Command command)
+    public IEnumerable<string> Run(Command command)
     {
         var files = command.InputImages;
 
@@ -28,7 +28,7 @@ public class CommandRunner : ICommandRunner
             Arguments = command.GenerateArguments(file),
             RedirectStandardOutput = true,
             UseShellExecute = false,
-            CreateNoWindow = true,
+            CreateNoWindow = true
         };
 
         var process = new Process

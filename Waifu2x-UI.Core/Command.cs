@@ -1,4 +1,3 @@
-using System.IO.Abstractions;
 using System.Reactive;
 using System.Text;
 using ReactiveUI;
@@ -26,11 +25,11 @@ public class Command : ReactiveObject
             x => x.ScaleFactor,
             x => x.Denoise,
             x => x.OutputFileType,
-            (x, y, z, q, t, a, b, c) => GetPreview());
+            (_, _, _, _, _, _, _, _) => GetPreview());
 
         var observer = Observer.Create<string>(
             x => Preview = x,
-            y => Preview = "Error occured when creating command preview",
+            _ => Preview = "Error occured when creating command preview",
             () => throw new InvalidOperationException());
 
         livePreview.Subscribe(observer);
@@ -48,8 +47,8 @@ public class Command : ReactiveObject
 
         return command.ToString();
     }
-    
-    public string GetPreview()
+
+    private string GetPreview()
     {
         var command = new StringBuilder();
 
@@ -74,7 +73,7 @@ public class Command : ReactiveObject
         return command.ToString();
     }
 
-    private StringBuilder AppendFlags(StringBuilder command)
+    private void AppendFlags(StringBuilder command)
     {
         command.Append($" -output-path {GetOutputPath()}");
         command.Append($" -format {OutputFileType.ToExtension()}");
@@ -86,8 +85,6 @@ public class Command : ReactiveObject
         if (Verbose) command.Append(" -verbose");
 
         if (TTA) command.Append(" -x");
-
-        return command;
     }
 
     private string GetOutputPath()

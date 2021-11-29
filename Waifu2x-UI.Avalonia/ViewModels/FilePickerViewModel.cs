@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -7,14 +6,14 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Waifu2x_UI.Avalonia.ViewModels;
+namespace Waifu2xUI.Avalonia.ViewModels;
 
 public class FilePickerViewModel : ViewModelBase
 {
     [Reactive] public string Watermark { get; set; }
     [Reactive] public string Content { get; set; } = string.Empty;
 
-    public ObservableCollection<FileInfo> Files { get; set; } = new();
+    public ObservableCollection<FileInfo> Files { get; } = new();
     
     private ReactiveCommand<Unit, Unit> OpenDialogCommand { get; }
 

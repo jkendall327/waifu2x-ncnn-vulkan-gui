@@ -3,7 +3,7 @@ using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 
-namespace Waifu2x_UI.Avalonia.Converters;
+namespace Waifu2xUI.Avalonia.Converters;
 
 public class ComboBoxToIntConverter : IValueConverter
 {
@@ -18,6 +18,8 @@ public class ComboBoxToIntConverter : IValueConverter
     {
         var val = (ComboBoxItem) value;
 
-        return int.Parse(val.Content.ToString());
+        var content = val.Content.ToString() ?? throw new ArgumentException(null, nameof(value));
+        
+        return int.Parse(content);
     }
 }

@@ -3,7 +3,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Waifu2x_UI.Core;
 
-namespace Waifu2x_UI.Avalonia.Converters;
+namespace Waifu2xUI.Avalonia.Converters;
 
 public class BoolToEnumConverter : IValueConverter
 {
