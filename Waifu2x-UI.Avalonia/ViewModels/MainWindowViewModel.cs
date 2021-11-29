@@ -1,4 +1,5 @@
-﻿using System.Reactive;
+﻿using System;
+using System.Reactive;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Waifu2x_UI.Core;
@@ -34,11 +35,29 @@ namespace Waifu2x_UI.Avalonia.ViewModels
             _runner = runner;
             
             RunCommand = CreateRunCommand();
-            
+
+            SetupCommandPreview();
+
             InputImagePicker = new("Select input...", FindImageDialog);
             OutputImagePicker = new("Set output directory...", FindImageDialog);
         }
-        
+
+        private void SetupCommandPreview()
+        {
+            var livePreview = this.WhenAnyValue(
+                x => x.Suffix,
+                x => x.Verbose,
+                x => x.PngOutput,
+                (x, y, z) => _command.GetArguments());
+
+            var observer = Observer.Create<string>(
+                x => Command = x,
+                y => Command = "Error occured when creating command preview",
+                () => throw new InvalidOperationException());
+
+            livePreview.Subscribe(observer);
+        }
+
         private ReactiveCommand<Unit, Unit> CreateRunCommand()
         {
             bool Selector(string input, string output)
