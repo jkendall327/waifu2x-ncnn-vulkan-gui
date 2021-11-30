@@ -85,7 +85,7 @@ public class MainWindowViewModel : ViewModelBase
         Report = string.Empty;
         Progress = 0;
 
-        await _preferencesManager.SavePreferences(Command);
+        // await _preferencesManager.SavePreferences(Command);
         
         await foreach (var (report, progress) in _runner.Run(Command))
         {
