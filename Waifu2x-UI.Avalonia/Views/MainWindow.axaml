@@ -94,10 +94,12 @@
             
             <CheckBox Grid.Column="5" 
                       Margin="0 0 20 0"
-                      Content="Verbose"/>
+                      Content="Verbose"
+                      IsChecked="{Binding Command.Verbose}"/>
             
             <CheckBox Grid.Column="6" 
-                      Content="TTA"/>
+                      Content="TTA"
+                      IsChecked="{Binding Command.TTA}"/>
         </Grid>
         
         <!-- Comboboxes -->
