@@ -21,6 +21,7 @@
     <Window.Resources>
         <converters:BoolToEnumConverter x:Key="EnumConverter"/>
         <converters:ComboBoxToIntConverter x:Key="ComboBoxToIntConverter"/>
+        <converters:ComboBoxToStringConverter x:Key="ComboBoxToStringConverter"/>
     </Window.Resources>
     
     <Window.Padding>10</Window.Padding>
@@ -129,10 +130,13 @@
                 
                 <TextBlock Grid.Column="1" Text="Model"/>
         
-                <ComboBox Grid.Column="2">
-                    <ComboBoxItem>Model #1</ComboBoxItem>
-                    <ComboBoxItem>Model #2</ComboBoxItem>
-                    <ComboBoxItem>Model #3</ComboBoxItem>
+                <ComboBox Grid.Column="2"
+                          SelectedItem="{
+                          Binding Command.Model, 
+                          Converter={StaticResource ComboBoxToStringConverter}}">
+                    <ComboBoxItem>models-cunet</ComboBoxItem>
+                    <ComboBoxItem>models-upconv_7_anime_style_art_rgb</ComboBoxItem>
+                    <ComboBoxItem>models-upconv_7_photo</ComboBoxItem>
                 </ComboBox>
         
                 <TextBlock Grid.Column="4" Text="Denoise level"/>

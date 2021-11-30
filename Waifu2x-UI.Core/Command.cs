@@ -26,7 +26,8 @@ public class Command : ReactiveObject
             x => x.ScaleFactor,
             x => x.Denoise,
             x => x.OutputFileType,
-            (_, _, _, _, _, _, _, _) => GetPreview());
+            x => x.Model,
+            (_, _, _, _, _, _, _, _, _) => GetPreview());
 
         var observer = Observer.Create<string>(
             x => Preview = x,
@@ -88,6 +89,8 @@ public class Command : ReactiveObject
         if (Verbose) command.Append(" -v");
 
         if (TTA) command.Append(" -x");
+
+        if (Model is not "models-cunet") command.Append($" -m {Model}");
     }
 
     private void AppendOutputPath(StringBuilder command, FileInfo file)
@@ -139,6 +142,9 @@ public class Command : ReactiveObject
     // Output
     [Reactive] public string? Suffix { get; set; } = "-upscaled";
     [Reactive] public OutputFileType OutputFileType { get; set; } = OutputFileType.Png;
+    
+    // Model
+    [Reactive] public string Model { get; set; } = "models-cunet"; 
     
     // Other flags
     [Reactive] public bool Verbose { get; set; } = true;
