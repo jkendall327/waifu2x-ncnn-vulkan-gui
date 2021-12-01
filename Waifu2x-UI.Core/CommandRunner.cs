@@ -18,11 +18,15 @@ public class CommandRunner : ICommandRunner
         var total = files.Count;
         var counter = 0;
         
+        var args = command.GenerateArguments();
+
         foreach (var file in files)
         {
             counter++;
             
-            var output = await SpawnProcess(command, file);
+            var finalArgs = args.Replace("$IMAGE", file.Name);
+
+            var output = await SpawnProcess(finalArgs);
 
             var report = $"({counter}/{total}) {output}";
 
@@ -34,12 +38,12 @@ public class CommandRunner : ICommandRunner
 
     private double CalculatePercentage(int counter, int total) => (double)(counter * 100) / total;
 
-    private async Task<string> SpawnProcess(Command command, FileInfo file)
+    private async Task<string> SpawnProcess(string args)
     {
         var processStartInfo = new ProcessStartInfo
         {
             FileName = _waifuPath,
-            Arguments = command.GenerateArguments(file),
+            Arguments = args,
             RedirectStandardOutput = true,
             UseShellExecute = false,
             CreateNoWindow = true

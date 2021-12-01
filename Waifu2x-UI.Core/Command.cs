@@ -27,7 +27,7 @@ public class Command : ReactiveObject
             x => x.Denoise,
             x => x.OutputFileType,
             x => x.Model,
-            (_, _, _, _, _, _, _, _, _) => GetPreview());
+            (_, _, _, _, _, _, _, _, _) => GenerateArguments());
 
         var observer = Observer.Create<string>(
             x => Preview = x,
@@ -37,49 +37,48 @@ public class Command : ReactiveObject
         livePreview.Subscribe(observer);
     }
 
-    public string GenerateArguments(FileInfo file)
+    public string GenerateArguments()
     {
-        var command = new StringBuilder();
+        var command = new StringBuilder("waifu-2x-ncnn-vulkan");
 
-        command.Append("waifu-2x-ncnn-vulkan");
+        if (!InputImages.Any()) return command.ToString();
+
+        var inputDir = InputImages.First().Directory?.FullName;
         
-        command.Append($" -i \"{file.FullName}\"");
+        command.Append($" -i \"{inputDir}{Path.DirectorySeparatorChar}$IMAGE\"");
 
-        AppendOutputPath(command, file);
+        command.Append($" -output-path");
         
-        AppendFlags(command);
-
-        return command.ToString();
-    }
-
-    private string GetPreview()
-    {
-        var command = new StringBuilder();
-
-        command.Append("waifu-2x-ncnn-vulkan");
+        AppendOutputPath(command);
         
-        if (!InputImages.Any())
-        {
-            return command.ToString();
-        }
-
-        if (InputImages.Count is 1)
-        {
-            command.Append($" -input-path \"{InputImages.First().FullName}\"");
-        }
-        else
-        {
-            command.Append(" -input-path [image]");
-        }
-
-        command.Append($" -output-path {GetPreviewOutputPath()}");
         command.Append($" -format {OutputFileType.ToExtension()}");
-
+        
         AppendFlags(command);
 
         return command.ToString();
     }
 
+    private void AppendOutputPath(StringBuilder command)
+    {
+        command.Append($" -o ");
+
+        command.Append('"');
+        
+        command.Append(OutputDirectory.FullName);
+
+        command.Append(Path.DirectorySeparatorChar);
+        
+        command.Append("$IMAGE");
+
+        if (!string.IsNullOrEmpty(Suffix)) command.Append(Suffix);
+
+        command.Append('.');
+        
+        command.Append(OutputFileType.ToExtension());
+
+        command.Append('"');
+    }
+    
     private void AppendFlags(StringBuilder command)
     {
         if (Denoise is not 0) command.Append($" -n {Denoise}");
@@ -91,50 +90,6 @@ public class Command : ReactiveObject
         if (TTA) command.Append(" -x");
 
         if (Model is not "models-cunet") command.Append($" -m {Model}");
-    }
-
-    private void AppendOutputPath(StringBuilder command, FileInfo file)
-    {
-        command.Append($" -o ");
-
-        command.Append('"');
-        
-        command.Append(OutputDirectory.FullName);
-
-        command.Append(Path.DirectorySeparatorChar);
-
-        var name = Path.GetFileNameWithoutExtension(file.Name);
-        
-        command.Append(name);
-
-        if (!string.IsNullOrEmpty(Suffix)) command.Append(Suffix);
-
-        command.Append('.');
-        
-        command.Append(OutputFileType.ToExtension());
-
-        command.Append('"');
-        
-        command.Append($" -format {OutputFileType.ToExtension()}");
-    }
-
-    private string GetPreviewOutputPath()
-    {
-        var sb = new StringBuilder();
-        
-        sb.Append(OutputDirectory.FullName);
-
-        sb.Append(Path.DirectorySeparatorChar);
-        
-        sb.Append(InputImages.Count is 1 ? InputImages.First().Name : "[image]");
-
-        if (!string.IsNullOrEmpty(Suffix)) sb.Append(Suffix);
-
-        sb.Append('.');
-        
-        sb.Append(OutputFileType.ToExtension());
-        
-        return sb.ToString();
     }
 
     [Reactive] public string Preview { get; private set; } = string.Empty;
