@@ -43,7 +43,7 @@ public class Command : ReactiveObject
 
         command.Append("waifu-2x-ncnn-vulkan");
         
-        command.Append($" -i {file.FullName}");
+        command.Append($" -i \"{file.FullName}\"");
 
         AppendOutputPath(command, file);
         
@@ -65,7 +65,7 @@ public class Command : ReactiveObject
 
         if (InputImages.Count is 1)
         {
-            command.Append($" -input-path {InputImages.First().FullName}");
+            command.Append($" -input-path \"{InputImages.First().FullName}\"");
         }
         else
         {
@@ -96,6 +96,8 @@ public class Command : ReactiveObject
     private void AppendOutputPath(StringBuilder command, FileInfo file)
     {
         command.Append($" -o ");
+
+        command.Append('"');
         
         command.Append(OutputDirectory.FullName);
 
@@ -110,6 +112,8 @@ public class Command : ReactiveObject
         command.Append('.');
         
         command.Append(OutputFileType.ToExtension());
+
+        command.Append('"');
         
         command.Append($" -format {OutputFileType.ToExtension()}");
     }
