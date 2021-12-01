@@ -12,7 +12,8 @@
         Title="Waifu2x_UI.Avalonia"
         MinWidth="900"
         MinHeight="600"
-        Width="900">
+        Width="900"
+        Height="600">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
