@@ -33,6 +33,12 @@ public class FilePickerViewModel : ViewModelBase
             {
                 Files.Add(file);
             }
+
+            if (files.Count is 1)
+            {
+                Content = files.First().FullName;
+                return;
+            }
             
             Content = string.Join(", ", Files.Select(x => x.Name));
         });
