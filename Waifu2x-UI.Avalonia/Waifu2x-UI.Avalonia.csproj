@@ -20,4 +20,10 @@
     <ItemGroup>
       <ProjectReference Include="..\Waifu2x-UI.Core\Waifu2x-UI.Core.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="Views\FolderOrFilePicker.axaml.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <AvaloniaXaml Remove="Views\FolderOrFilePicker.axaml" />
+    </ItemGroup>
 </Project>
