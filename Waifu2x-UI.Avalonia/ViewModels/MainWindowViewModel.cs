@@ -43,11 +43,11 @@ public class MainWindowViewModel : ViewModelBase
         _runner = runner;
         _directory = directory;
 
-        Command = command ?? new Command(directory);
+        Command = command ?? new Command();
 
         Models = GetModels();
         
-        InputImagePicker = new("Select input...", FindImageDialog);
+        InputImagePicker = new("Select input...", Command, FindImageDialog);
         OutputDirectoryPicker = new("Set output directory...", FindOutputDirectoryDialog);
             
         RunCommand = CreateRunCommand();

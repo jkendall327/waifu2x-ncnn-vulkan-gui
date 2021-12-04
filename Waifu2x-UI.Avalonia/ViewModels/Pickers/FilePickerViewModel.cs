@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Waifu2x_UI.Core;
 
 namespace Waifu2xUI.Avalonia.ViewModels;
 
@@ -14,7 +15,7 @@ public class FilePickerViewModel : PickerBaseViewModel
     
     private ReactiveCommand<Unit, Unit> OpenDialogCommand { get; }
 
-    public FilePickerViewModel(string watermark, Interaction<Unit, string[]> dialogInteraction) : base(watermark)
+    public FilePickerViewModel(string watermark, Command command, Interaction<Unit, string[]> dialogInteraction) : base(watermark)
     {
         OpenDialogCommand = ReactiveCommand.CreateFromTask(async () =>
         {
@@ -28,6 +29,10 @@ public class FilePickerViewModel : PickerBaseViewModel
             {
                 Files.Add(file);
             }
+
+            if (!files.Any()) return;
+
+            command.OutputDirectory ??= files.First().Directory;
 
             if (files.Count is 1)
             {

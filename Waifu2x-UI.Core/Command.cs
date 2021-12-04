@@ -1,4 +1,3 @@
-using System.IO.Abstractions;
 using System.Reactive;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,10 +8,8 @@ namespace Waifu2x_UI.Core;
 
 public class Command : ReactiveObject
 {
-    public Command(IDirectory directory)
+    public Command()
     {
-        OutputDirectory = directory.GetOutputDirectory();
-        
         SetupCommandPreview();
     }
 
@@ -65,7 +62,7 @@ public class Command : ReactiveObject
 
         command.Append('"');
         
-        command.Append(OutputDirectory.FullName);
+        command.Append(OutputDirectory?.FullName);
 
         command.Append(Path.DirectorySeparatorChar);
         
@@ -112,5 +109,5 @@ public class Command : ReactiveObject
     
     // Paths
     [Reactive] [JsonIgnore] public List<FileInfo> InputImages { get; set; } = new();
-    [Reactive] [JsonIgnore] public DirectoryInfo OutputDirectory { get; set; }
+    [Reactive] [JsonIgnore] public DirectoryInfo? OutputDirectory { get; set; }
 }
