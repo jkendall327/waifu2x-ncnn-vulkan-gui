@@ -56,12 +56,10 @@ public class MainWindowViewModel : ViewModelBase
 
     private List<string> GetModels()
     {
-        return new()
-        {
-            "models-cunet",
-            "models-upconv_7_anime_style_art_rgb",
-            "models-upconv_7_photo"
-        };
+        return DirectoryExtensions.GetWaifuDirectory()
+            .EnumerateDirectories()
+            .Select(x => x.Name)
+            .ToList();
     }
 
     private void FilesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

@@ -65,11 +65,10 @@ public class CommandRunner : ICommandRunner
 
     private string GetWaifu()
     {
-        var parent = Directory.GetParent(Directory.GetCurrentDirectory()) ?? throw new DirectoryNotFoundException();
-
-        var waifu = new DirectoryInfo(parent.FullName + Path.DirectorySeparatorChar + "waifu2x");
-        
-        var file = waifu.EnumerateFiles().FirstOrDefault(x => x.Name is "waifu2x-ncnn-vulkan");
+        var file = DirectoryExtensions
+            .GetWaifuDirectory()
+            .EnumerateFiles()
+            .FirstOrDefault(x => x.Name is "waifu2x-ncnn-vulkan");
 
         return file?.FullName ?? throw new FileNotFoundException("Waifu2x executable not found!");
     }
