@@ -6,6 +6,8 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using Waifu2x_UI.Core;
 using Waifu2xUI.Avalonia.ViewModels;
 using Waifu2xUI.Avalonia.Views;
@@ -52,7 +54,9 @@ public class App : Application
         var options = SetupConfiguration();
 
         services.AddSingleton(options);
-        
+
+        SetupLogging(services);
+
         services.AddTransient(s => new MainWindow
         {
             DirectoryService = s.GetRequiredService<IDirectoryService>(),
@@ -60,6 +64,19 @@ public class App : Application
         });
 
         return services.BuildServiceProvider();
+    }
+
+    private static void SetupLogging(IServiceCollection services)
+    {
+        var logger = new LoggerConfiguration()
+            .WriteTo.File("app.log")
+            .CreateLogger();
+
+        services.AddLogging(builder =>
+        {
+            builder.AddConsole();
+            builder.AddSerilog(logger);
+        });
     }
 
     private static SerializationOptions SetupConfiguration()

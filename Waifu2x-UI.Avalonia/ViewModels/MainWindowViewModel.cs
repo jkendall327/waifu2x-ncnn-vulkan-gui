@@ -4,6 +4,7 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Waifu2x_UI.Core;
@@ -16,6 +17,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ICommandRunner _runner;
     private readonly IDirectoryService _directoryService;
     private readonly IPreferencesManager _preferencesManager;
+    private readonly ILogger<MainWindowViewModel> _logger;
 
     // Viewmodels
     public FilePickerViewModel InputImagePicker { get; }
@@ -38,11 +40,15 @@ public class MainWindowViewModel : ViewModelBase
     // Models
     public Command Command { get; }
         
-    public MainWindowViewModel(ICommandRunner runner, IFileInfoFactory factory, IDirectoryService directoryService, IPreferencesManager preferencesManager)
+    public MainWindowViewModel(ICommandRunner runner, IFileInfoFactory factory, IDirectoryService directoryService,
+        IPreferencesManager preferencesManager, ILogger<MainWindowViewModel> logger)
     {
         _runner = runner;
         _directoryService = directoryService;
         _preferencesManager = preferencesManager;
+        _logger = logger;
+
+        logger.LogInformation("App started");
 
         Command = _preferencesManager.LoadPreferences() ?? new Command();
         
@@ -59,11 +65,17 @@ public class MainWindowViewModel : ViewModelBase
 
     private List<string> GetModels()
     {
-        return _directoryService
-            .GetWaifuDirectory()
+        var directory = _directoryService.GetWaifuDirectory();
+        
+        var models = directory
             .EnumerateDirectories()
             .Select(x => x.Name)
             .ToList();
+        
+        _logger.LogInformation("Loaded {ModelCount} upscaling models from {ModelDirectory}", 
+            models.Count, directory.FullName);
+
+        return models;
     }
 
     private void FilesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -76,6 +88,8 @@ public class MainWindowViewModel : ViewModelBase
         var observer = Observer.Create<IDirectoryInfo?>(input =>
         {
             if (input is null) return;
+            
+            _logger.LogInformation("Output directory changed to {DirectoryName}", input.FullName);
             Command.OutputDirectory = input;
         });
 
@@ -99,6 +113,8 @@ public class MainWindowViewModel : ViewModelBase
     
     private async Task Run()
     {
+        _logger.LogInformation("Running command: {Preview}", Command.Preview);
+        
         await _preferencesManager.SavePreferences(Command);
         
         Report = string.Empty;

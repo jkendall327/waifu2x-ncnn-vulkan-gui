@@ -21,7 +21,7 @@ public class FilePickerViewModel : PickerBaseViewModel
         {
             var result = await dialogInteraction.Handle(Unit.Default);
 
-            var files = result.Select(x => fileInfoFactory.FromFileName(x)).ToList();
+            var files = result.Select(fileInfoFactory.FromFileName).ToList();
             
             Files.Clear();
 
