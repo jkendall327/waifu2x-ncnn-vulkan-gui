@@ -42,12 +42,12 @@ public class App : Application
         services.AddSingleton(filesystem.FileInfo);
         
         services.AddTransient<ICommandRunner, CommandRunner>();
+        services.AddTransient<IDirectoryService, DirectoryService>();
         services.AddTransient<MainWindowViewModel>();
 
         services.AddTransient(s => new MainWindow
         {
-            Directory = s.GetRequiredService<IDirectory>(),
-            DirectoryInfoFactory = s.GetRequiredService<IDirectoryInfoFactory>(),
+            DirectoryService = s.GetRequiredService<IDirectoryService>(),
             DataContext = s.GetRequiredService<MainWindowViewModel>()
         });
 

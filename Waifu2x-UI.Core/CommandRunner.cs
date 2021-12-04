@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.IO.Abstractions;
 
 namespace Waifu2x_UI.Core;
 
@@ -7,13 +6,11 @@ public class CommandRunner : ICommandRunner
 {
     private readonly string _waifuPath;
 
-    private readonly IDirectory _directory;
-    private readonly IDirectoryInfoFactory _directoryInfoFactory;
+    private readonly IDirectoryService _directoryService;
     
-    public CommandRunner(IDirectory directory, IDirectoryInfoFactory directoryInfoFactory)
+    public CommandRunner(IDirectoryService directoryService)
     {
-        _directory = directory;
-        _directoryInfoFactory = directoryInfoFactory;
+        _directoryService = directoryService;
 
         _waifuPath = GetWaifu();
     }
@@ -72,9 +69,8 @@ public class CommandRunner : ICommandRunner
 
     private string GetWaifu()
     {
-        var directory = _directory.GetWaifuDirectory();
-        
-        var file = _directoryInfoFactory.FromDirectoryName(directory)
+        var file = _directoryService
+            .GetWaifuDirectory()
             .EnumerateFiles()
             .FirstOrDefault(x => x.Name is "waifu2x-ncnn-vulkan");
 

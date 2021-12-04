@@ -14,8 +14,7 @@ public class MainWindowViewModel : ViewModelBase
 {
     // Services
     private readonly ICommandRunner _runner;
-    private readonly IDirectory _directory;
-    private readonly IDirectoryInfoFactory _directoryInfoFactory;
+    private readonly IDirectoryService _directoryService;
 
     // Viewmodels
     public FilePickerViewModel InputImagePicker { get; }
@@ -38,11 +37,10 @@ public class MainWindowViewModel : ViewModelBase
     // Models
     public Command Command { get; }
         
-    public MainWindowViewModel(ICommandRunner runner, IDirectory directory, IFileInfoFactory factory, IDirectoryInfoFactory directoryInfoFactory, Command? command = null)
+    public MainWindowViewModel(ICommandRunner runner, IFileInfoFactory factory, IDirectoryService directoryService, Command? command = null)
     {
         _runner = runner;
-        _directory = directory;
-        _directoryInfoFactory = directoryInfoFactory;
+        _directoryService = directoryService;
 
         Command = command ?? new Command();
 
@@ -59,9 +57,8 @@ public class MainWindowViewModel : ViewModelBase
 
     private List<string> GetModels()
     {
-        var directory = _directory.GetWaifuDirectory();
-        
-        return _directoryInfoFactory.FromDirectoryName(directory)
+        return _directoryService
+            .GetWaifuDirectory()
             .EnumerateDirectories()
             .Select(x => x.Name)
             .ToList();
@@ -87,7 +84,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         bool Selector(string input, IDirectoryInfo? output)
         {
-            return !string.IsNullOrEmpty(input) && _directory.Exists(output?.FullName);
+            return !string.IsNullOrEmpty(input) && _directoryService.Exists(output);
         }
 
         var canExecute = this.WhenAnyValue(
