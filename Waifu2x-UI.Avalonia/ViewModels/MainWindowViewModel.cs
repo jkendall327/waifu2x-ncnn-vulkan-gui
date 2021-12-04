@@ -15,6 +15,7 @@ public class MainWindowViewModel : ViewModelBase
     // Services
     private readonly ICommandRunner _runner;
     private readonly IDirectoryService _directoryService;
+    private readonly IPreferencesManager _preferencesManager;
 
     // Viewmodels
     public FilePickerViewModel InputImagePicker { get; }
@@ -37,13 +38,14 @@ public class MainWindowViewModel : ViewModelBase
     // Models
     public Command Command { get; }
         
-    public MainWindowViewModel(ICommandRunner runner, IFileInfoFactory factory, IDirectoryService directoryService, Command? command = null)
+    public MainWindowViewModel(ICommandRunner runner, IFileInfoFactory factory, IDirectoryService directoryService, IPreferencesManager preferencesManager)
     {
         _runner = runner;
         _directoryService = directoryService;
+        _preferencesManager = preferencesManager;
 
-        Command = command ?? new Command();
-
+        Command = _preferencesManager.LoadPreferences() ?? new Command();
+        
         Models = GetModels();
         
         InputImagePicker = new("Select input...", Command, FindImageDialog, factory);
@@ -97,10 +99,10 @@ public class MainWindowViewModel : ViewModelBase
     
     private async Task Run()
     {
+        await _preferencesManager.SavePreferences(Command);
+        
         Report = string.Empty;
         Progress = 0;
-
-        // await _preferencesManager.SavePreferences(Command);
         
         await foreach (var (report, progress) in _runner.Run(Command))
         {

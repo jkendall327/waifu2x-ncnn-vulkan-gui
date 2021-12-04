@@ -18,12 +18,26 @@ public class PreferencesManager : IPreferencesManager
         await JsonSerializer.SerializeAsync(stream, command);
     }
 
-    public async Task<Command?> LoadPreferences()
+    public async Task<Command?> LoadPreferencesAsync()
     {
         if (!_file.Exists(_filepath)) return null;
 
         await using var stream = new FileStream(_filepath, FileMode.Open);
         
         return await JsonSerializer.DeserializeAsync<Command>(stream);
+    }
+    
+    public Command? LoadPreferences()
+    {
+        if (!_file.Exists(_filepath)) return null;
+
+        try
+        {
+            return JsonSerializer.Deserialize<Command>(_file.ReadAllText(_filepath));
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
     }
 }

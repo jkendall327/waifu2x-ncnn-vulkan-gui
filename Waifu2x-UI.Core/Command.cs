@@ -13,7 +13,7 @@ public class Command : ReactiveObject
     {
         SetupCommandPreview();
     }
-
+    
     private void SetupCommandPreview()
     {
         var livePreview = this.WhenAnyValue(

@@ -20,7 +20,7 @@ public class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         var provider = BuildServiceProvider();
-
+        
         var mainWindow = provider.GetRequiredService<MainWindow>();
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -40,9 +40,11 @@ public class App : Application
         services.AddSingleton(filesystem.Directory);
         services.AddSingleton(filesystem.DirectoryInfo);
         services.AddSingleton(filesystem.FileInfo);
+        services.AddSingleton(filesystem.File);
         
         services.AddTransient<ICommandRunner, CommandRunner>();
         services.AddTransient<IDirectoryService, DirectoryService>();
+        services.AddTransient<IPreferencesManager, PreferencesManager>();
         services.AddTransient<MainWindowViewModel>();
 
         services.AddTransient(s => new MainWindow
