@@ -9,8 +9,6 @@
 
     <UserControl.Resources>
         <converters:BoolToEnumConverter x:Key="EnumConverter"/>
-        <converters:ComboBoxToIntConverter x:Key="ComboBoxToIntConverter"/>
-        <converters:ComboBoxToStringConverter x:Key="ComboBoxToStringConverter"/>
     </UserControl.Resources>
     
     <Design.DataContext>
