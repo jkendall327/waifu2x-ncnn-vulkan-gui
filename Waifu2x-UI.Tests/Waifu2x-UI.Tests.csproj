@@ -23,4 +23,8 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Waifu2x-UI.Core\Waifu2x-UI.Core.csproj" />
+    </ItemGroup>
+
 </Project>
