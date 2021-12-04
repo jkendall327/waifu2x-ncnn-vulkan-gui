@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using System.IO.Abstractions;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Waifu2x_UI.Core;
 using Waifu2xUI.Avalonia.ViewModels;
@@ -46,7 +48,11 @@ public class App : Application
         services.AddTransient<IDirectoryService, DirectoryService>();
         services.AddTransient<IPreferencesManager, PreferencesManager>();
         services.AddTransient<MainWindowViewModel>();
+        
+        var options = SetupConfiguration();
 
+        services.AddSingleton(options);
+        
         services.AddTransient(s => new MainWindow
         {
             DirectoryService = s.GetRequiredService<IDirectoryService>(),
@@ -54,5 +60,18 @@ public class App : Application
         });
 
         return services.BuildServiceProvider();
+    }
+
+    private static SerializationOptions SetupConfiguration()
+    {
+        var config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        SerializationOptions options = new();
+
+        config.GetSection(nameof(SerializationOptions)).Bind(options);
+        return options;
     }
 }
