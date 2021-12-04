@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Waifu2x_UI.Core;
 
 namespace Waifu2xUI.Avalonia.ViewModels;

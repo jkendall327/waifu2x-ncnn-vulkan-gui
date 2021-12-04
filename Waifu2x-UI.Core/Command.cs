@@ -45,7 +45,7 @@ public class Command : ReactiveObject
         
         command.Append($" -i \"{inputDir}{Path.DirectorySeparatorChar}$IMAGE\"");
 
-        command.Append($" -output-path");
+        command.Append(" -output-path");
         
         AppendOutputPath(command);
         
@@ -58,7 +58,7 @@ public class Command : ReactiveObject
 
     private void AppendOutputPath(StringBuilder command)
     {
-        command.Append($" -o ");
+        command.Append(" -o ");
 
         command.Append('"');
         
