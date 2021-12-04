@@ -14,7 +14,6 @@ public class MainWindowViewModel : ViewModelBase
 {
     // Services
     private readonly ICommandRunner _runner;
-    private readonly IPreferencesManager _preferencesManager;
         
     // Viewmodels
     public FilePickerViewModel InputImagePicker { get; }
@@ -33,10 +32,9 @@ public class MainWindowViewModel : ViewModelBase
     // Models
     public Command Command { get; }
         
-    public MainWindowViewModel(ICommandRunner runner, IPreferencesManager preferencesManager, Command? command = null)
+    public MainWindowViewModel(ICommandRunner runner, Command? command = null)
     {
         _runner = runner;
-        _preferencesManager = preferencesManager;
 
         Command = command ?? new Command();
 

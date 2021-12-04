@@ -33,7 +33,7 @@ public class App : Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(runner, manager, userData)
+                DataContext = new MainWindowViewModel(runner, userData)
             };
         }
 
