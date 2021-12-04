@@ -41,8 +41,7 @@
         
             <RadioButton Grid.Row="0" Grid.Column="3"
                          Margin="15 0"
-                         Content="JPG" 
-                         IsChecked="{Binding !#PngRadio.IsChecked}"/>
+                         Content="JPG"/>
             
             <CheckBox Grid.Row="0" Grid.Column="5" 
                       Margin="0 0 20 0"
@@ -53,7 +52,7 @@
             
             <CheckBox Grid.Row="0" Grid.Column="6" 
                       Content="TTA"
-                      ToolTip.Tip="Test-Time Augmentation. Increases processing time in exchange for reducing certain kinds of artifacting."
+                      ToolTip.Tip="Test-Time Augmentation. Increases processing time in exchange for reducing certain kinds of artifacts."
                       IsChecked="{Binding Command.TTA}">
             </CheckBox>
             
@@ -63,16 +62,14 @@
                       MinWidth="200"
                       ToolTip.Tip="The upscaling model used."
                       SelectedItem="{Binding Command.Model}"
-                      Items="{Binding Models}">
-            </ComboBox>
+                      Items="{Binding Models}"/>
         
             <TextBlock Grid.Row="1" Grid.Column="2" Text="Denoise level"/>
 
             <ComboBox Grid.Row="1" Grid.Column="3"
                       MaxWidth="80"
                       SelectedItem="{Binding Command.Denoise}"
-                      Items="{Binding DenoiseLevels}">
-            </ComboBox>
+                      Items="{Binding DenoiseLevels}"/>
 
             <TextBlock Grid.Row="1" Grid.Column="4" Text="Scale factor"/>
 
@@ -80,8 +77,7 @@
                       MaxWidth="80"
                       ToolTip.Tip="How much Waifu2x should upscale your images."
                       SelectedItem="{Binding Command.ScaleFactor}"
-                      Items="{Binding ScaleFactors}">
-            </ComboBox>
+                      Items="{Binding ScaleFactors}"/>
         </Grid>
 
 </UserControl>
