@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Reactive;
@@ -16,7 +15,8 @@ public class MainWindowViewModel : ViewModelBase
     // Services
     private readonly ICommandRunner _runner;
     private readonly IDirectory _directory;
-        
+    private readonly IDirectoryInfoFactory _directoryInfoFactory;
+
     // Viewmodels
     public FilePickerViewModel InputImagePicker { get; }
     public DirectoryPickerViewModel OutputDirectoryPicker { get; }
@@ -24,7 +24,7 @@ public class MainWindowViewModel : ViewModelBase
     // Commands and interactions
     public ReactiveCommand<Unit, Unit> RunCommand { get; }
     public Interaction<Unit, string[]> FindImageDialog { get; } = new();
-    public Interaction<Unit, DirectoryInfo> FindOutputDirectoryDialog { get; } = new();
+    public Interaction<Unit, IDirectoryInfo> FindOutputDirectoryDialog { get; } = new();
         
     // Bindings
     [Reactive] public string Report { get; set; } = string.Empty;
@@ -38,16 +38,17 @@ public class MainWindowViewModel : ViewModelBase
     // Models
     public Command Command { get; }
         
-    public MainWindowViewModel(ICommandRunner runner, IDirectory directory, Command? command = null)
+    public MainWindowViewModel(ICommandRunner runner, IDirectory directory, IFileInfoFactory factory, IDirectoryInfoFactory directoryInfoFactory, Command? command = null)
     {
         _runner = runner;
         _directory = directory;
+        _directoryInfoFactory = directoryInfoFactory;
 
         Command = command ?? new Command();
 
         Models = GetModels();
         
-        InputImagePicker = new("Select input...", Command, FindImageDialog);
+        InputImagePicker = new("Select input...", Command, FindImageDialog, factory);
         OutputDirectoryPicker = new("Set output directory...", FindOutputDirectoryDialog);
             
         RunCommand = CreateRunCommand();
@@ -58,7 +59,9 @@ public class MainWindowViewModel : ViewModelBase
 
     private List<string> GetModels()
     {
-        return _directory.GetWaifuDirectory()
+        var directory = _directory.GetWaifuDirectory();
+        
+        return _directoryInfoFactory.FromDirectoryName(directory)
             .EnumerateDirectories()
             .Select(x => x.Name)
             .ToList();
@@ -71,7 +74,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private void LinkOutputToCommand()
     {
-        var observer = Observer.Create<DirectoryInfo?>(input =>
+        var observer = Observer.Create<IDirectoryInfo?>(input =>
         {
             if (input is null) return;
             Command.OutputDirectory = input;
@@ -82,7 +85,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private ReactiveCommand<Unit, Unit> CreateRunCommand()
     {
-        bool Selector(string input, DirectoryInfo? output)
+        bool Selector(string input, IDirectoryInfo? output)
         {
             return !string.IsNullOrEmpty(input) && _directory.Exists(output?.FullName);
         }

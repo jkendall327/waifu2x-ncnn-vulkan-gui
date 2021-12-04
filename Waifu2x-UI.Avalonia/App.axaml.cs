@@ -38,12 +38,16 @@ public class App : Application
         var filesystem = new FileSystem();
 
         services.AddSingleton(filesystem.Directory);
+        services.AddSingleton(filesystem.DirectoryInfo);
+        services.AddSingleton(filesystem.FileInfo);
+        
         services.AddTransient<ICommandRunner, CommandRunner>();
         services.AddTransient<MainWindowViewModel>();
 
         services.AddTransient(s => new MainWindow
         {
             Directory = s.GetRequiredService<IDirectory>(),
+            DirectoryInfoFactory = s.GetRequiredService<IDirectoryInfoFactory>(),
             DataContext = s.GetRequiredService<MainWindowViewModel>()
         });
 

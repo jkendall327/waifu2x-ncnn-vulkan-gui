@@ -8,11 +8,13 @@ public class CommandRunner : ICommandRunner
     private readonly string _waifuPath;
 
     private readonly IDirectory _directory;
+    private readonly IDirectoryInfoFactory _directoryInfoFactory;
     
-    public CommandRunner(IDirectory directory)
+    public CommandRunner(IDirectory directory, IDirectoryInfoFactory directoryInfoFactory)
     {
         _directory = directory;
-        
+        _directoryInfoFactory = directoryInfoFactory;
+
         _waifuPath = GetWaifu();
     }
     
@@ -70,8 +72,9 @@ public class CommandRunner : ICommandRunner
 
     private string GetWaifu()
     {
-        var file = _directory
-            .GetWaifuDirectory()
+        var directory = _directory.GetWaifuDirectory();
+        
+        var file = _directoryInfoFactory.FromDirectoryName(directory)
             .EnumerateFiles()
             .FirstOrDefault(x => x.Name is "waifu2x-ncnn-vulkan");
 

@@ -1,3 +1,4 @@
+using System.IO.Abstractions;
 using System.Reactive;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -108,6 +109,6 @@ public class Command : ReactiveObject
     [Reactive] [JsonIgnore] public bool TTA { get; set; }
     
     // Paths
-    [Reactive] [JsonIgnore] public List<FileInfo> InputImages { get; set; } = new();
-    [Reactive] [JsonIgnore] public DirectoryInfo? OutputDirectory { get; set; }
+    [Reactive] [JsonIgnore] public List<IFileInfo> InputImages { get; set; } = new();
+    [Reactive] [JsonIgnore] public IDirectoryInfo? OutputDirectory { get; set; }
 }
