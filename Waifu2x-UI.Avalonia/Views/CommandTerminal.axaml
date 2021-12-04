@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Waifu2xUI.Avalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Waifu2xUI.Avalonia.Views.CommandTerminal">
+    
+    <Design.DataContext>
+        <viewModels:MainWindowViewModel/>
+    </Design.DataContext>
+    
+    <TextBox Margin="10"
+             CornerRadius="8"
+             IsReadOnly="True"
+             Watermark="Terminal output..."
+             Text="{Binding Report}">
+        <ToolTip.Tip>
+            <TextBlock Text="Console output from Waifu2x will be displayed here."/>
+        </ToolTip.Tip>
+    </TextBox>
+    
+</UserControl>

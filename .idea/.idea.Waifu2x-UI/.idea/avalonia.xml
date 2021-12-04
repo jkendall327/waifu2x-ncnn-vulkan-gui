@@ -4,8 +4,13 @@
     <option name="projectPerEditor">
       <map>
         <entry key="Waifu2x-UI.Avalonia/App.axaml" value="Waifu2x-UI.Avalonia/Waifu2x-UI.Avalonia.csproj" />
+        <entry key="Waifu2x-UI.Avalonia/Views/CommandBar.axaml" value="Waifu2x-UI.Avalonia/Waifu2x-UI.Avalonia.csproj" />
+        <entry key="Waifu2x-UI.Avalonia/Views/CommandTerminal.axaml" value="Waifu2x-UI.Avalonia/Waifu2x-UI.Avalonia.csproj" />
         <entry key="Waifu2x-UI.Avalonia/Views/FilePicker.axaml" value="Waifu2x-UI.Avalonia/Waifu2x-UI.Avalonia.csproj" />
         <entry key="Waifu2x-UI.Avalonia/Views/MainWindow.axaml" value="Waifu2x-UI.Avalonia/Waifu2x-UI.Avalonia.csproj" />
+        <entry key="Waifu2x-UI.Avalonia/Views/OutputBar.axaml" value="Waifu2x-UI.Avalonia/Waifu2x-UI.Avalonia.csproj" />
+        <entry key="Waifu2x-UI.Avalonia/Views/SmoothProgressBar.axaml" value="Waifu2x-UI.Avalonia/Waifu2x-UI.Avalonia.csproj" />
+        <entry key="Waifu2x-UI.Avalonia/Views/Title.axaml" value="Waifu2x-UI.Avalonia/Waifu2x-UI.Avalonia.csproj" />
       </map>
     </option>
   </component>

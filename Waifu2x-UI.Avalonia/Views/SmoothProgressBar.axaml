@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:other="clr-namespace:Waifu2xUI.Avalonia.Other"
+             xmlns:viewModels="clr-namespace:Waifu2xUI.Avalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Waifu2xUI.Avalonia.Views.SmoothProgressBar">
+    
+    <Design.DataContext>
+        <viewModels:MainWindowViewModel/>
+    </Design.DataContext>
+    
+    <UserControl.Styles>
+        <Style Selector="ProgressBar">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="(other:ProgressBarWorkaround.Value)" Duration="0:0:0.5"/>
+                </Transitions>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+    
+    <ProgressBar
+        Margin="10 15 10 10"
+                 Height="30"
+                 other:ProgressBarWorkaround.Value="{Binding Progress}"/>
+</UserControl>

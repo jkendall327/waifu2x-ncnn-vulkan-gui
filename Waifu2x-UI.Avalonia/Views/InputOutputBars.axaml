@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:Waifu2xUI.Avalonia.Views"
+             xmlns:viewModels="clr-namespace:Waifu2xUI.Avalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Waifu2xUI.Avalonia.Views.InputOutputBars">
+    
+    <Design.DataContext>
+        <viewModels:MainWindowViewModel/>
+    </Design.DataContext>
+    
+    <Grid RowDefinitions="*, *">
+        <views:FilePicker Grid.Row="0" Margin="10" DataContext="{Binding InputImagePicker}">
+            <ToolTip.Tip>
+                <TextBlock Text="Select the images you want to upscale. You can select multiple images."/>
+            </ToolTip.Tip>
+        </views:FilePicker>
+        
+        <views:FilePicker Grid.Row="1" Margin="10" DataContext="{Binding OutputDirectoryPicker}">
+            <ToolTip.Tip>
+                <TextBlock Text="Select the output directory for the upscaled images. WARNING: files with the same name will be overwritten!"/>
+            </ToolTip.Tip>
+        </views:FilePicker>
+    </Grid>
+    
+</UserControl>

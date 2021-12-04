@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Waifu2xUI.Avalonia.Views.Title">
+    
+    <TextBlock 
+        FontSize="30"
+        FontWeight="Bold"
+        Text="waifu2x-nccn-vulkan" 
+        HorizontalAlignment="Left" 
+        VerticalAlignment="Center">
+        
+        <ToolTip.Tip>
+            <TextBlock Text="Original waifu2x-ncnn-vulkan by nihui, this GUI by jkendall327."/>
+        </ToolTip.Tip>
+        
+    </TextBlock>
+</UserControl>

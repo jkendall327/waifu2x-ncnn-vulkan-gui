@@ -4,8 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:Waifu2xUI.Avalonia.Views"
-        xmlns:converters="clr-namespace:Waifu2xUI.Avalonia.Converters"
-        xmlns:other="clr-namespace:Waifu2xUI.Avalonia.Other"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Waifu2xUI.Avalonia.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -18,12 +16,6 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
-    <Window.Resources>
-        <converters:BoolToEnumConverter x:Key="EnumConverter"/>
-        <converters:ComboBoxToIntConverter x:Key="ComboBoxToIntConverter"/>
-        <converters:ComboBoxToStringConverter x:Key="ComboBoxToStringConverter"/>
-    </Window.Resources>
     
     <Window.Padding>10</Window.Padding>
     
@@ -34,194 +26,21 @@
         <Style Selector="TextBox">
             <Setter Property="Margin" Value="5"/>
         </Style>
-        <Style Selector="ProgressBar">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition Property="(other:ProgressBarWorkaround.Value)"
-                                      Duration="0:0:0.5"/>
-                </Transitions>
-            </Setter>
-        </Style>
     </Window.Styles>
     
-    <Grid RowDefinitions="auto, auto, auto, auto, auto, auto, *, auto">
+    <Grid RowDefinitions="auto, auto, auto, auto, *, auto">
         
-        <TextBlock 
-                   FontSize="30"
-                   FontWeight="Bold"
-                   Text="waifu2x-nccn-vulkan" 
-                   HorizontalAlignment="Left" 
-                   VerticalAlignment="Center">
-            <ToolTip.Tip>
-                <TextBlock Text="Original waifu2x-ncnn-vulkan by nihui, this GUI by jkendall327."/>
-            </ToolTip.Tip>
+        <views:Title/>
+        
+        <views:InputOutputBars Grid.Row="1"/>
+        
+        <views:OutputBar Grid.Row="2"/>
 
-        </TextBlock>
+        <views:SmoothProgressBar Grid.Row="3"/>
         
-        <!-- Input/output -->
+        <views:CommandTerminal Grid.Row="4"/>
         
-        <views:FilePicker Grid.Row="1" Margin="10" DataContext="{Binding InputImagePicker}">
-            <ToolTip.Tip>
-                <TextBlock Text="Select the images you want to upscale. You can select multiple images."/>
-            </ToolTip.Tip>
-        </views:FilePicker>
+        <views:CommandBar Grid.Row="5"/>
         
-        <views:FilePicker Grid.Row="2" Margin="10" DataContext="{Binding OutputDirectoryPicker}">
-            <ToolTip.Tip>
-                <TextBlock Text="Select the output directory for the upscaled images. WARNING: files with the same name will be overwritten!"/>
-            </ToolTip.Tip>
-        </views:FilePicker>
-        
-        <!-- Output -->
-        <Grid Grid.Row="3" ColumnDefinitions="auto, 2*, Auto, Auto, *, *, *" Margin="0 10">
-            
-            <TextBlock
-                Margin="15 0 0 0"
-                VerticalAlignment="Center"
-                Text="Output file suffix"/>
-        
-            <TextBox Grid.Column="1"
-                     VerticalContentAlignment="Center"
-                     Text="{Binding Command.Suffix}"
-                     Watermark="Enter suffixes for processed files here">
-                <ToolTip.Tip>
-                    <TextBlock Text="What you enter here will be appended to the end of every processed file."/>
-                </ToolTip.Tip>
-            </TextBox>
-            
-            <RadioButton Grid.Column="2" 
-                         Margin="15 0"
-                         Name="PngRadio"
-                         Content="PNG"
-                         IsChecked="{
-                     Binding Command.OutputFileType, 
-                     Converter={StaticResource EnumConverter}}"/>
-        
-            <RadioButton Grid.Column="3"
-                         Margin="15 0"
-                         Content="JPG" 
-                         IsChecked="{Binding !#PngRadio.IsChecked}"/>
-            
-            <CheckBox Grid.Column="5" 
-                      Margin="0 0 20 0"
-                      Content="Verbose"
-                      IsChecked="{Binding Command.Verbose}">
-                <ToolTip.Tip>
-                    <TextBlock Text="Waifu2x will provide verbose output when processing files."/>
-                </ToolTip.Tip>
-            </CheckBox>
-            
-            <CheckBox Grid.Column="6" 
-                      Content="TTA"
-                      IsChecked="{Binding Command.TTA}">
-                <ToolTip.Tip>
-                    <TextBlock Text="Test-Time Augmentation. Increases processing time in exchange for reducing certain kinds of artifacting."/>
-                </ToolTip.Tip>
-            </CheckBox>
-        </Grid>
-        
-        <!-- Comboboxes -->
-        <Border Grid.Row="4">
-            <Border.BorderThickness>0</Border.BorderThickness>
-            <Border.CornerRadius>7</Border.CornerRadius>
-            <Border.BorderBrush>
-                <SolidColorBrush Color="Gray"/>
-            </Border.BorderBrush>
-            
-            <Border.Styles>
-                <Style Selector="TextBlock">
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="Margin" Value="15 0"/>
-                </Style>
-                <Style Selector="TextBox">
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                </Style>
-                <Style Selector="ComboBox">
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
-                </Style>
-            </Border.Styles>
-            
-            <Grid ColumnDefinitions="*, auto, 5*, *, auto, 5*, *, auto, 5*, auto">
-                
-                <TextBlock Grid.Column="1" Text="Model"/>
-        
-                <ComboBox Grid.Column="2"
-                          MinWidth="200"
-                          SelectedItem="{
-                          Binding Command.Model, 
-                          Converter={StaticResource ComboBoxToStringConverter}}">
-                    <ToolTip.Tip>
-                        <TextBlock Text="The upscaling model used."/>
-                    </ToolTip.Tip>
-                    <ComboBoxItem>models-cunet</ComboBoxItem>
-                    <ComboBoxItem>models-upconv_7_anime_style_art_rgb</ComboBoxItem>
-                    <ComboBoxItem>models-upconv_7_photo</ComboBoxItem>
-                </ComboBox>
-        
-                <TextBlock Grid.Column="4" Text="Denoise level"/>
-
-                <ComboBox Grid.Column="5"
-                          MaxWidth="80"
-                          SelectedItem="{
-                  Binding Command.Denoise, 
-                  Converter={StaticResource ComboBoxToIntConverter}}">
-                    <ComboBoxItem Content="0"/>
-                    <ComboBoxItem Content="1"/>
-                    <ComboBoxItem Content="2"/>
-                    <ComboBoxItem Content="3"/>
-                </ComboBox>
-
-                <TextBlock Grid.Column="7" Text="Scale factor"/>
-
-                <ComboBox Grid.Column="8" 
-                          MaxWidth="80"
-                          SelectedItem="{
-                  Binding Command.ScaleFactor,
-                   Converter={StaticResource ComboBoxToIntConverter}}">
-                    <ToolTip.Tip>
-                        <TextBlock Text="How much Waifu2x should upscale your images."/>
-                    </ToolTip.Tip>
-                    <ComboBoxItem Content="2"/>
-                    <ComboBoxItem Content="4"/>
-                    <ComboBoxItem Content="8"/>
-                    <ComboBoxItem Content="16"/>
-                </ComboBox>
-            </Grid>
-        </Border>
-
-        <!-- Progress bar -->
-        <ProgressBar Grid.Row="5"
-                     Margin="10 15 10 10"
-                     Height="30"
-                     other:ProgressBarWorkaround.Value="{Binding Progress}"/>
-
-        <!-- Terminal -->
-        <TextBox Grid.Row="6"
-                 Margin="10"
-                 CornerRadius="8"
-                 IsReadOnly="True"
-                 Watermark="Terminal output..."
-                 Text="{Binding Report}"/>
-        
-        <!-- Command preview and run button -->
-        <Grid Grid.Row="7" ColumnDefinitions="*, auto">
-            <TextBox Grid.Column="0"
-                     IsReadOnly="True" 
-                     VerticalContentAlignment="Center"
-                     Text="{Binding Command.Preview}">
-                <ToolTip.Tip>
-                    <TextBlock Text="This represents the terminal command that will be used to invoke Waifu2x."/>
-                </ToolTip.Tip>
-            </TextBox>
-        
-            <Button Grid.Column="1"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"
-                    Content="Run" 
-                    Command="{Binding RunCommand}"/>
-        </Grid>
     </Grid>
 </Window>

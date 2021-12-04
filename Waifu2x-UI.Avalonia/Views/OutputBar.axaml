@@ -1,0 +1,113 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:Waifu2xUI.Avalonia.Converters"
+             xmlns:viewModels="clr-namespace:Waifu2xUI.Avalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Waifu2xUI.Avalonia.Views.OutputBar">
+
+    <UserControl.Resources>
+        <converters:BoolToEnumConverter x:Key="EnumConverter"/>
+        <converters:ComboBoxToIntConverter x:Key="ComboBoxToIntConverter"/>
+        <converters:ComboBoxToStringConverter x:Key="ComboBoxToStringConverter"/>
+    </UserControl.Resources>
+    
+    <Design.DataContext>
+        <viewModels:MainWindowViewModel/>
+    </Design.DataContext>
+    
+    <Grid 
+        RowDefinitions="*, *"
+        ColumnDefinitions="auto, 2*, Auto, Auto, *, *, *">
+            
+            <TextBlock Grid.Row="0"
+                Margin="15 0 0 0"
+                VerticalAlignment="Center"
+                Text="Output file suffix"/>
+        
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     VerticalContentAlignment="Center"
+                     Text="{Binding Command.Suffix}"
+                     Watermark="Enter suffixes for processed files here">
+                <ToolTip.Tip>
+                    <TextBlock Text="What you enter here will be appended to the end of every processed file."/>
+                </ToolTip.Tip>
+            </TextBox>
+            
+            <RadioButton Grid.Row="0" Grid.Column="2" 
+                         Margin="15 0"
+                         Name="PngRadio"
+                         Content="PNG"
+                         IsChecked="{
+                     Binding Command.OutputFileType, 
+                     Converter={StaticResource EnumConverter}}"/>
+        
+            <RadioButton Grid.Row="0" Grid.Column="3"
+                         Margin="15 0"
+                         Content="JPG" 
+                         IsChecked="{Binding !#PngRadio.IsChecked}"/>
+            
+            <CheckBox Grid.Row="0" Grid.Column="5" 
+                      Margin="0 0 20 0"
+                      Content="Verbose"
+                      IsChecked="{Binding Command.Verbose}">
+                <ToolTip.Tip>
+                    <TextBlock Text="Waifu2x will provide verbose output when processing files."/>
+                </ToolTip.Tip>
+            </CheckBox>
+            
+            <CheckBox Grid.Row="0" Grid.Column="6" 
+                      Content="TTA"
+                      IsChecked="{Binding Command.TTA}">
+                <ToolTip.Tip>
+                    <TextBlock Text="Test-Time Augmentation. Increases processing time in exchange for reducing certain kinds of artifacting."/>
+                </ToolTip.Tip>
+            </CheckBox>
+            
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Model"/>
+        
+            <ComboBox Grid.Row="1" Grid.Column="1"
+                      MinWidth="200"
+                      SelectedItem="{
+                          Binding Command.Model, 
+                          Converter={StaticResource ComboBoxToStringConverter}}">
+                <ToolTip.Tip>
+                    <TextBlock Text="The upscaling model used."/>
+                </ToolTip.Tip>
+                <ComboBoxItem>models-cunet</ComboBoxItem>
+                <ComboBoxItem>models-upconv_7_anime_style_art_rgb</ComboBoxItem>
+                <ComboBoxItem>models-upconv_7_photo</ComboBoxItem>
+            </ComboBox>
+        
+            <TextBlock Grid.Row="1" Grid.Column="2" Text="Denoise level"/>
+
+            <ComboBox Grid.Row="1" Grid.Column="3"
+                      MaxWidth="80"
+                      SelectedItem="{
+                  Binding Command.Denoise, 
+                  Converter={StaticResource ComboBoxToIntConverter}}">
+                <ComboBoxItem Content="0"/>
+                <ComboBoxItem Content="1"/>
+                <ComboBoxItem Content="2"/>
+                <ComboBoxItem Content="3"/>
+            </ComboBox>
+
+            <TextBlock Grid.Row="1" Grid.Column="4" Text="Scale factor"/>
+
+            <ComboBox Grid.Row="1" Grid.Column="5" 
+                      MaxWidth="80"
+                      SelectedItem="{
+                  Binding Command.ScaleFactor,
+                   Converter={StaticResource ComboBoxToIntConverter}}">
+                <ToolTip.Tip>
+                    <TextBlock Text="How much Waifu2x should upscale your images."/>
+                </ToolTip.Tip>
+                <ComboBoxItem Content="2"/>
+                <ComboBoxItem Content="4"/>
+                <ComboBoxItem Content="8"/>
+                <ComboBoxItem Content="16"/>
+            </ComboBox>
+        </Grid>
+
+</UserControl>

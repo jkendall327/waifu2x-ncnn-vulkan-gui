@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Waifu2xUI.Avalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Waifu2xUI.Avalonia.Views.CommandBar">
+    
+    <Design.DataContext>
+        <viewModels:MainWindowViewModel/>
+    </Design.DataContext>
+    
+    <Grid ColumnDefinitions="*, auto">
+        <TextBox Grid.Column="0"
+                 IsReadOnly="True" 
+                 VerticalContentAlignment="Center"
+                 Text="{Binding Command.Preview}">
+            <ToolTip.Tip>
+                <TextBlock Text="This represents the terminal command that will be used to invoke Waifu2x."/>
+            </ToolTip.Tip>
+        </TextBox>
+        
+        <Button Grid.Column="1"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                Content="Run" 
+                Command="{Binding RunCommand}"/>
+    </Grid>
+</UserControl>
