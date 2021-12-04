@@ -22,8 +22,10 @@
     </ItemGroup>
     <ItemGroup>
       <Compile Remove="Views\FolderOrFilePicker.axaml.cs" />
+      <Compile Remove="Views\AnnotatedComboBox.axaml.cs" />
     </ItemGroup>
     <ItemGroup>
       <AvaloniaXaml Remove="Views\FolderOrFilePicker.axaml" />
+      <AvaloniaXaml Remove="Views\AnnotatedComboBox.axaml" />
     </ItemGroup>
 </Project>

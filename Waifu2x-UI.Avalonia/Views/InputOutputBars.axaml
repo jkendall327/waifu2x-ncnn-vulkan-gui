@@ -12,16 +12,14 @@
     </Design.DataContext>
     
     <Grid RowDefinitions="*, *">
-        <views:FilePicker Grid.Row="0" Margin="10" DataContext="{Binding InputImagePicker}">
-            <ToolTip.Tip>
-                <TextBlock Text="Select the images you want to upscale. You can select multiple images."/>
-            </ToolTip.Tip>
+        <views:FilePicker Grid.Row="0" Margin="10" 
+                          ToolTip.Tip="Select the images you want to upscale. You can select multiple images."
+                          DataContext="{Binding InputImagePicker}">
         </views:FilePicker>
         
-        <views:FilePicker Grid.Row="1" Margin="10" DataContext="{Binding OutputDirectoryPicker}">
-            <ToolTip.Tip>
-                <TextBlock Text="Select the output directory for the upscaled images. WARNING: files with the same name will be overwritten!"/>
-            </ToolTip.Tip>
+        <views:FilePicker Grid.Row="1" Margin="10"
+                          ToolTip.Tip="Select the output directory for the upscaled images. WARNING: files with the same name will be overwritten."
+                          DataContext="{Binding OutputDirectoryPicker}">
         </views:FilePicker>
     </Grid>
     

@@ -29,10 +29,8 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      VerticalContentAlignment="Center"
                      Text="{Binding Command.Suffix}"
-                     Watermark="Enter suffixes for processed files here">
-                <ToolTip.Tip>
-                    <TextBlock Text="What you enter here will be appended to the end of every processed file."/>
-                </ToolTip.Tip>
+                     Watermark="Enter suffixes for processed files here"
+                     ToolTip.Tip="What you enter here will be appended to the end of every processed file.">
             </TextBox>
             
             <RadioButton Grid.Row="0" Grid.Column="2" 
@@ -51,33 +49,29 @@
             <CheckBox Grid.Row="0" Grid.Column="5" 
                       Margin="0 0 20 0"
                       Content="Verbose"
+                      ToolTip.Tip="Waifu2x will provide verbose output when processing files."
                       IsChecked="{Binding Command.Verbose}">
-                <ToolTip.Tip>
-                    <TextBlock Text="Waifu2x will provide verbose output when processing files."/>
-                </ToolTip.Tip>
             </CheckBox>
             
             <CheckBox Grid.Row="0" Grid.Column="6" 
                       Content="TTA"
+                      ToolTip.Tip="Test-Time Augmentation. Increases processing time in exchange for reducing certain kinds of artifacting."
                       IsChecked="{Binding Command.TTA}">
-                <ToolTip.Tip>
-                    <TextBlock Text="Test-Time Augmentation. Increases processing time in exchange for reducing certain kinds of artifacting."/>
-                </ToolTip.Tip>
             </CheckBox>
             
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Model"/>
         
             <ComboBox Grid.Row="1" Grid.Column="1"
                       MinWidth="200"
+                      ToolTip.Tip="The upscaling model used."
                       SelectedItem="{
                           Binding Command.Model, 
                           Converter={StaticResource ComboBoxToStringConverter}}">
-                <ToolTip.Tip>
-                    <TextBlock Text="The upscaling model used."/>
-                </ToolTip.Tip>
+                
                 <ComboBoxItem>models-cunet</ComboBoxItem>
                 <ComboBoxItem>models-upconv_7_anime_style_art_rgb</ComboBoxItem>
                 <ComboBoxItem>models-upconv_7_photo</ComboBoxItem>
+                
             </ComboBox>
         
             <TextBlock Grid.Row="1" Grid.Column="2" Text="Denoise level"/>
@@ -97,12 +91,10 @@
 
             <ComboBox Grid.Row="1" Grid.Column="5" 
                       MaxWidth="80"
-                      SelectedItem="{
-                  Binding Command.ScaleFactor,
+                      ToolTip.Tip="How much Waifu2x should upscale your images."
+                      SelectedItem="{Binding Command.ScaleFactor,
                    Converter={StaticResource ComboBoxToIntConverter}}">
-                <ToolTip.Tip>
-                    <TextBlock Text="How much Waifu2x should upscale your images."/>
-                </ToolTip.Tip>
+                
                 <ComboBoxItem Content="2"/>
                 <ComboBoxItem Content="4"/>
                 <ComboBoxItem Content="8"/>

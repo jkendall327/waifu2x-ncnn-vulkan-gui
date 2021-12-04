@@ -14,10 +14,8 @@
              CornerRadius="8"
              IsReadOnly="True"
              Watermark="Terminal output..."
+             ToolTip.Tip="Console output from Waifu2x will be displayed here."
              Text="{Binding Report}">
-        <ToolTip.Tip>
-            <TextBlock Text="Console output from Waifu2x will be displayed here."/>
-        </ToolTip.Tip>
     </TextBox>
     
 </UserControl>

@@ -14,10 +14,8 @@
         <TextBox Grid.Column="0"
                  IsReadOnly="True" 
                  VerticalContentAlignment="Center"
+                 ToolTip.Tip="This represents the terminal command that will be used to invoke Waifu2x."
                  Text="{Binding Command.Preview}">
-            <ToolTip.Tip>
-                <TextBlock Text="This represents the terminal command that will be used to invoke Waifu2x."/>
-            </ToolTip.Tip>
         </TextBox>
         
         <Button Grid.Column="1"
