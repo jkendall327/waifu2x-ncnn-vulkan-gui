@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,10 @@ public class MainWindowViewModel : ViewModelBase
     
     [Reactive] public double Progress { get; set; }
     
+    public List<int> DenoiseLevels { get; set; }= new() { 0, 1, 2, 3 };
+    public List<int> ScaleFactors { get; set; }= new() { 2, 4, 8, 16 };
+    public List<string> Models { get; set; }
+
     // Models
     public Command Command { get; }
         
@@ -38,6 +43,8 @@ public class MainWindowViewModel : ViewModelBase
 
         Command = command ?? new Command();
 
+        Models = GetModels();
+        
         InputImagePicker = new("Select input...", FindImageDialog);
         OutputDirectoryPicker = new("Set output directory...", FindOutputDirectoryDialog);
             
@@ -45,6 +52,16 @@ public class MainWindowViewModel : ViewModelBase
 
         InputImagePicker.Files.CollectionChanged += FilesOnCollectionChanged;
         LinkOutputToCommand();
+    }
+
+    private List<string> GetModels()
+    {
+        return new()
+        {
+            "models-cunet",
+            "models-upconv_7_anime_style_art_rgb",
+            "models-upconv_7_photo"
+        };
     }
 
     private void FilesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

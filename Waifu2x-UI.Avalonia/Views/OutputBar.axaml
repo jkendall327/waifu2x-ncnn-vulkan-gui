@@ -64,27 +64,16 @@
             <ComboBox Grid.Row="1" Grid.Column="1"
                       MinWidth="200"
                       ToolTip.Tip="The upscaling model used."
-                      SelectedItem="{
-                          Binding Command.Model, 
-                          Converter={StaticResource ComboBoxToStringConverter}}">
-                
-                <ComboBoxItem>models-cunet</ComboBoxItem>
-                <ComboBoxItem>models-upconv_7_anime_style_art_rgb</ComboBoxItem>
-                <ComboBoxItem>models-upconv_7_photo</ComboBoxItem>
-                
+                      SelectedItem="{Binding Command.Model}"
+                      Items="{Binding Models}">
             </ComboBox>
         
             <TextBlock Grid.Row="1" Grid.Column="2" Text="Denoise level"/>
 
             <ComboBox Grid.Row="1" Grid.Column="3"
                       MaxWidth="80"
-                      SelectedItem="{
-                  Binding Command.Denoise, 
-                  Converter={StaticResource ComboBoxToIntConverter}}">
-                <ComboBoxItem Content="0"/>
-                <ComboBoxItem Content="1"/>
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="3"/>
+                      SelectedItem="{Binding Command.Denoise}"
+                      Items="{Binding DenoiseLevels}">
             </ComboBox>
 
             <TextBlock Grid.Row="1" Grid.Column="4" Text="Scale factor"/>
@@ -92,13 +81,8 @@
             <ComboBox Grid.Row="1" Grid.Column="5" 
                       MaxWidth="80"
                       ToolTip.Tip="How much Waifu2x should upscale your images."
-                      SelectedItem="{Binding Command.ScaleFactor,
-                   Converter={StaticResource ComboBoxToIntConverter}}">
-                
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="4"/>
-                <ComboBoxItem Content="8"/>
-                <ComboBoxItem Content="16"/>
+                      SelectedItem="{Binding Command.ScaleFactor}"
+                      Items="{Binding ScaleFactors}">
             </ComboBox>
         </Grid>
 
