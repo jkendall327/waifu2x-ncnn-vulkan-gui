@@ -1,3 +1,4 @@
+using System.IO.Abstractions;
 using System.Reactive;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -8,9 +9,9 @@ namespace Waifu2x_UI.Core;
 
 public class Command : ReactiveObject
 {
-    public Command()
+    public Command(IDirectory directory)
     {
-        OutputDirectory = DirectoryExtensions.GetOutputDirectory();
+        OutputDirectory = directory.GetOutputDirectory();
         
         SetupCommandPreview();
     }

@@ -1,7 +1,4 @@
-using System;
 using System.IO.Abstractions;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -20,35 +17,20 @@ public class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        var file = new FileSystem().File;
+        var filesystem = new FileSystem();
+        var directory = filesystem.Directory;
         
-        var runner = new CommandRunner();
-        var manager = new PreferencesManager(file);
-
-        //var userData = await LoadUserData(manager);
-
-        Command? userData = null;
+        var runner = new CommandRunner(directory);
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(runner, userData)
+                Directory = filesystem.Directory,
+                DataContext = new MainWindowViewModel(runner, directory)
             };
         }
 
         base.OnFrameworkInitializationCompleted();
-    }
-
-    private static async Task<Command?> LoadUserData(IPreferencesManager manager)
-    {
-        try
-        {
-            return await manager.LoadPreferences();
-        }
-        catch (JsonException)
-        {
-            return null;
-        }
     }
 }

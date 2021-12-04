@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.IO.Abstractions;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia;
@@ -14,6 +15,8 @@ namespace Waifu2xUI.Avalonia.Views;
 
 public class MainWindow : ReactiveWindow<MainWindowViewModel>
 {
+    public IDirectory? Directory { get; set; }
+    
     public MainWindow()
     {
         InitializeComponent();
@@ -35,6 +38,8 @@ public class MainWindow : ReactiveWindow<MainWindowViewModel>
 
     private async Task ShowSelectDirectoryDialogAsync(InteractionContext<Unit, DirectoryInfo> interaction)
     {
+        if (Directory is null) throw new InvalidOperationException("No directory interface set for main window");
+        
         var dialog = new OpenFolderDialog
         {
             Directory = Directory.GetCurrentDirectory(),
@@ -45,7 +50,7 @@ public class MainWindow : ReactiveWindow<MainWindowViewModel>
 
         if (result is null)
         {
-            interaction.SetOutput(DirectoryExtensions.GetOutputDirectory());
+            interaction.SetOutput(Directory.GetOutputDirectory());
             return;
         }
             

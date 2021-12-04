@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -15,6 +15,7 @@ public class MainWindowViewModel : ViewModelBase
 {
     // Services
     private readonly ICommandRunner _runner;
+    private readonly IDirectory _directory;
         
     // Viewmodels
     public FilePickerViewModel InputImagePicker { get; }
@@ -37,11 +38,12 @@ public class MainWindowViewModel : ViewModelBase
     // Models
     public Command Command { get; }
         
-    public MainWindowViewModel(ICommandRunner runner, Command? command = null)
+    public MainWindowViewModel(ICommandRunner runner, IDirectory directory, Command? command = null)
     {
         _runner = runner;
+        _directory = directory;
 
-        Command = command ?? new Command();
+        Command = command ?? new Command(directory);
 
         Models = GetModels();
         
@@ -56,7 +58,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private List<string> GetModels()
     {
-        return DirectoryExtensions.GetWaifuDirectory()
+        return _directory.GetWaifuDirectory()
             .EnumerateDirectories()
             .Select(x => x.Name)
             .ToList();
@@ -82,7 +84,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         bool Selector(string input, DirectoryInfo? output)
         {
-            return !string.IsNullOrEmpty(input) && Directory.Exists(output?.FullName);
+            return !string.IsNullOrEmpty(input) && _directory.Exists(output?.FullName);
         }
 
         var canExecute = this.WhenAnyValue(
