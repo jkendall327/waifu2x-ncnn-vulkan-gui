@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Waifu2x_UI.Core;
+namespace Waifu2x_UI.Core.Commands;
 
 public class Command : ReactiveObject
 {

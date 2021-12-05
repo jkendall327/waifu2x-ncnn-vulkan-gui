@@ -8,6 +8,9 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Waifu2x_UI.Core;
+using Waifu2x_UI.Core.Commands;
+using Waifu2x_UI.Core.Filesystem;
+using Waifu2x_UI.Core.Serialization;
 
 namespace Waifu2xUI.Avalonia.ViewModels;
 

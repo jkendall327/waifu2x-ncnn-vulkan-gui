@@ -1,6 +1,6 @@
 using System.IO.Abstractions;
 
-namespace Waifu2x_UI.Core;
+namespace Waifu2x_UI.Core.Filesystem;
 
 public class DirectoryService : IDirectoryService
 {

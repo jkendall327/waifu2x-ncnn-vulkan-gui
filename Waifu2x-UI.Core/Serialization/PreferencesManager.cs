@@ -1,8 +1,9 @@
 using System.IO.Abstractions;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using Waifu2x_UI.Core.Commands;
 
-namespace Waifu2x_UI.Core;
+namespace Waifu2x_UI.Core.Serialization;
 
 public class PreferencesManager : IPreferencesManager
 {

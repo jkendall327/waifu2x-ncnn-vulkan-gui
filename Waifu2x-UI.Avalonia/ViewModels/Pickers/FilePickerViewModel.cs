@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
 using Waifu2x_UI.Core;
+using Waifu2x_UI.Core.Commands;
 
 namespace Waifu2xUI.Avalonia.ViewModels;
 

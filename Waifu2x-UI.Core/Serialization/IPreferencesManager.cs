@@ -1,4 +1,6 @@
-namespace Waifu2x_UI.Core;
+using Waifu2x_UI.Core.Commands;
+
+namespace Waifu2x_UI.Core.Serialization;
 
 public interface IPreferencesManager
 {

@@ -4,6 +4,7 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using FluentAssertions;
 using Waifu2x_UI.Core;
+using Waifu2x_UI.Core.Commands;
 using Xunit;
 
 namespace Waifu2x_UI.Tests;

@@ -1,6 +1,6 @@
 using System.IO.Abstractions;
 
-namespace Waifu2x_UI.Core;
+namespace Waifu2x_UI.Core.Filesystem;
 
 /// <summary>
 /// Exposes convenience methods for getting app-relevant directories.

@@ -1,7 +1,8 @@
 using System.Diagnostics;
 using Microsoft.Extensions.Logging;
+using Waifu2x_UI.Core.Filesystem;
 
-namespace Waifu2x_UI.Core;
+namespace Waifu2x_UI.Core.Commands;
 
 public class CommandRunner : ICommandRunner
 {

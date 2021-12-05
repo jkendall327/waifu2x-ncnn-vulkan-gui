@@ -1,4 +1,4 @@
-namespace Waifu2x_UI.Core;
+namespace Waifu2x_UI.Core.Serialization;
 
 public class SerializationOptions
 {

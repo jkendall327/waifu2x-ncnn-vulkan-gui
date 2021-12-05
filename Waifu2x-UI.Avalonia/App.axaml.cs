@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Waifu2x_UI.Core;
+using Waifu2x_UI.Core.Commands;
+using Waifu2x_UI.Core.Filesystem;
+using Waifu2x_UI.Core.Serialization;
 using Waifu2xUI.Avalonia.ViewModels;
 using Waifu2xUI.Avalonia.Views;
 

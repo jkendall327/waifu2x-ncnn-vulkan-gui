@@ -9,6 +9,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
 using Waifu2x_UI.Core;
+using Waifu2x_UI.Core.Filesystem;
 using Waifu2xUI.Avalonia.ViewModels;
 
 namespace Waifu2xUI.Avalonia.Views;
