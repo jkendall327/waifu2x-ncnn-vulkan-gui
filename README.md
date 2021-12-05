@@ -1,5 +1,7 @@
 # waifu-2x-nccn-vulkan-gui
 
+[![build and test](https://github.com/jkendall327/waifu2x-ncnn-vulkan-gui/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/jkendall327/waifu2x-ncnn-vulkan-gui/actions/workflows/build-and-test.yml)
+
 ![Screenshot of the program](image.jpg)
 
 - GUI frontend for [waifu-2x-nccn-vulkan](https://github.com/nihui/waifu2x-ncnn-vulkan), created by nihui
