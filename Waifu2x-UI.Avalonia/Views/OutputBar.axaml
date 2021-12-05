@@ -11,18 +11,32 @@
         <converters:BoolToEnumConverter x:Key="EnumConverter"/>
     </UserControl.Resources>
     
+    <UserControl.Styles>
+        <Style Selector="ComboBox">
+            <Setter Property="MinHeight" Value="40"/>
+            <Setter Property="MinWidth" Value="100"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="MinHeight" Value="40"/>
+        </Style>
+        <Style Selector="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="15 0"/>
+        </Style>
+    </UserControl.Styles>
+    
     <Design.DataContext>
         <viewModels:MainWindowViewModel/>
     </Design.DataContext>
     
     <Grid 
         RowDefinitions="*, *"
-        ColumnDefinitions="auto, 2*, Auto, Auto, *, *, *">
+        ColumnDefinitions="auto, auto, *, Auto, Auto, *, auto, auto, auto, *">
             
         <!-- Output combobox -->
             <TextBlock Grid.Row="0"
-                Margin="15 0 0 0"
                 VerticalAlignment="Center"
+                HorizontalAlignment="Right"
                 Text="Output file suffix"/>
         
             <TextBox Grid.Row="0" Grid.Column="1"
@@ -33,7 +47,7 @@
             </TextBox>
             
         <!-- Output extension radiobuttons -->
-            <RadioButton Grid.Row="0" Grid.Column="2" 
+            <RadioButton Grid.Row="0" Grid.Column="3" 
                          Margin="15 0"
                          Name="PngRadio"
                          Content="PNG"
@@ -41,26 +55,27 @@
                      Binding Command.OutputFileType, 
                      Converter={StaticResource EnumConverter}}"/>
         
-            <RadioButton Grid.Row="0" Grid.Column="3"
+            <RadioButton Grid.Row="0" Grid.Column="4"
                          Margin="15 0"
+                         HorizontalAlignment="Right"
                          Content="JPG"/>
             
         <!-- Verbose and TTA-->
-            <CheckBox Grid.Row="0" Grid.Column="5" 
-                      Margin="0 0 20 0"
+            <CheckBox Grid.Row="0" Grid.Column="7" 
                       Content="Verbose"
                       ToolTip.Tip="Waifu2x will provide verbose output when processing files."
                       IsChecked="{Binding Command.Verbose}">
             </CheckBox>
             
-            <CheckBox Grid.Row="0" Grid.Column="6" 
+            <CheckBox Grid.Row="0" Grid.Column="8" 
                       Content="TTA"
+                      HorizontalAlignment="Right"
                       ToolTip.Tip="Test-Time Augmentation. Increases processing time in exchange for reducing certain kinds of artifacts."
                       IsChecked="{Binding Command.TTA}">
             </CheckBox>
             
         <!--Upscaling combobox-->
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Model"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Model" HorizontalAlignment="Right"/>
         
             <ComboBox Grid.Row="1" Grid.Column="1"
                       MinWidth="200"
@@ -69,18 +84,19 @@
                       Items="{Binding Models}"/>
         
         <!--Denoise combobox-->
-        <TextBlock Grid.Row="1" Grid.Column="2" Text="Denoise level"/>
+        <TextBlock Grid.Row="1" Grid.Column="3" Text="Denoise level"/>
 
-            <ComboBox Grid.Row="1" Grid.Column="3"
+            <ComboBox Grid.Row="1" Grid.Column="4"
                       MaxWidth="80"
                       SelectedItem="{Binding Command.Denoise}"
                       Items="{Binding DenoiseLevels}"/>
 
         <!--Scale factor combobox-->
-        <TextBlock Grid.Row="1" Grid.Column="4" Text="Scale factor"/>
+        <TextBlock Grid.Row="1" Grid.Column="7" Text="Scale factor" HorizontalAlignment="Right"/>
 
-            <ComboBox Grid.Row="1" Grid.Column="5" 
+            <ComboBox Grid.Row="1" Grid.Column="8" 
                       MaxWidth="80"
+                      HorizontalAlignment="Right"
                       ToolTip.Tip="How much Waifu2x should upscale your images."
                       SelectedItem="{Binding Command.ScaleFactor}"
                       Items="{Binding ScaleFactors}"/>
