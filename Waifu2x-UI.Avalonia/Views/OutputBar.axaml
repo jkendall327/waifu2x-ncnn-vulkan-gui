@@ -19,6 +19,7 @@
         RowDefinitions="*, *"
         ColumnDefinitions="auto, 2*, Auto, Auto, *, *, *">
             
+        <!-- Output combobox -->
             <TextBlock Grid.Row="0"
                 Margin="15 0 0 0"
                 VerticalAlignment="Center"
@@ -31,6 +32,7 @@
                      ToolTip.Tip="What you enter here will be appended to the end of every processed file.">
             </TextBox>
             
+        <!-- Output extension radiobuttons -->
             <RadioButton Grid.Row="0" Grid.Column="2" 
                          Margin="15 0"
                          Name="PngRadio"
@@ -43,6 +45,7 @@
                          Margin="15 0"
                          Content="JPG"/>
             
+        <!-- Verbose and TTA-->
             <CheckBox Grid.Row="0" Grid.Column="5" 
                       Margin="0 0 20 0"
                       Content="Verbose"
@@ -56,6 +59,7 @@
                       IsChecked="{Binding Command.TTA}">
             </CheckBox>
             
+        <!--Upscaling combobox-->
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Model"/>
         
             <ComboBox Grid.Row="1" Grid.Column="1"
@@ -64,14 +68,16 @@
                       SelectedItem="{Binding Command.Model}"
                       Items="{Binding Models}"/>
         
-            <TextBlock Grid.Row="1" Grid.Column="2" Text="Denoise level"/>
+        <!--Denoise combobox-->
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="Denoise level"/>
 
             <ComboBox Grid.Row="1" Grid.Column="3"
                       MaxWidth="80"
                       SelectedItem="{Binding Command.Denoise}"
                       Items="{Binding DenoiseLevels}"/>
 
-            <TextBlock Grid.Row="1" Grid.Column="4" Text="Scale factor"/>
+        <!--Scale factor combobox-->
+        <TextBlock Grid.Row="1" Grid.Column="4" Text="Scale factor"/>
 
             <ComboBox Grid.Row="1" Grid.Column="5" 
                       MaxWidth="80"
