@@ -24,13 +24,13 @@ public class PreferencesManager : IPreferencesManager
     public async Task SavePreferences(Command command)
     {
         if (!_options.SerializationEnabled) return;
-        
+
         _logger.LogInformation("Saving user data");
-        
+
         await using var stream = _file.Create(_filepath);
 
         var options = _options.PrettyPrint ? new JsonSerializerOptions { WriteIndented = true } : null;
-        
+
         await JsonSerializer.SerializeAsync(stream, command, options);
     }
 
@@ -41,10 +41,10 @@ public class PreferencesManager : IPreferencesManager
         if (!_file.Exists(_filepath)) return null;
 
         await using var stream = new FileStream(_filepath, FileMode.Open);
-        
+
         return await JsonSerializer.DeserializeAsync<Command>(stream);
     }
-    
+
     public Command? LoadPreferences()
     {
         if (!_options.SerializationEnabled) return null;

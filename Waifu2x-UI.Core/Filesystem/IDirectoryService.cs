@@ -11,12 +11,12 @@ public interface IDirectoryService
     /// Get the default output directory for processed images.
     /// </summary>
     public IDirectoryInfo GetOutputDirectory();
-    
+
     /// <summary>
     /// Gets the directory where the Waifu2x executable should be found.
     /// </summary>
     public IDirectoryInfo GetWaifuDirectory();
-    
+
     /// <summary>
     /// Converts a <see cref="string"/> into a <see cref="IDirectoryInfo"/>.
     /// </summary>

@@ -18,7 +18,7 @@ public class ProgressBarWorkaround
     {
         ValueProperty.Changed.Subscribe(ev =>
         {
-            ((ProgressBar) ev.Sender).Value = ev.NewValue.Value;
+            ((ProgressBar)ev.Sender).Value = ev.NewValue.Value;
         });
     }
 }

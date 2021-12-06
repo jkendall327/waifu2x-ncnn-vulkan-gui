@@ -13,7 +13,7 @@ public class Command : ReactiveObject
     {
         SetupCommandPreview();
     }
-    
+
     private void SetupCommandPreview()
     {
         var livePreview = this.WhenAnyValue(
@@ -43,15 +43,15 @@ public class Command : ReactiveObject
         if (!InputImages.Any()) return command.ToString();
 
         var inputDir = InputImages.First().Directory?.FullName;
-        
+
         command.Append($" -i \"{inputDir}{Path.DirectorySeparatorChar}$IMAGE\"");
 
         command.Append(" -output-path");
-        
+
         AppendOutputPath(command);
-        
+
         command.Append($" -format {OutputFileType.ToExtension()}");
-        
+
         AppendFlags(command);
 
         return command.ToString();
@@ -62,22 +62,22 @@ public class Command : ReactiveObject
         command.Append(" -o ");
 
         command.Append('"');
-        
+
         command.Append(OutputDirectory?.FullName);
 
         command.Append(Path.DirectorySeparatorChar);
-        
+
         command.Append("$IMAGE");
 
         if (!string.IsNullOrEmpty(Suffix)) command.Append(Suffix);
 
         command.Append('.');
-        
+
         command.Append(OutputFileType.ToExtension());
 
         command.Append('"');
     }
-    
+
     private void AppendFlags(StringBuilder command)
     {
         if (Denoise is not 0) command.Append($" -n {Denoise}");
@@ -92,22 +92,22 @@ public class Command : ReactiveObject
     }
 
     [Reactive] public string Preview { get; private set; } = string.Empty;
-    
+
     // Image quality
     [Reactive] public int ScaleFactor { get; set; } = 2;
     [Reactive] public int Denoise { get; set; }
-    
+
     // Output
     [Reactive] public string? Suffix { get; set; } = "-upscaled";
     [Reactive] public OutputFileType OutputFileType { get; set; } = OutputFileType.Png;
-    
+
     // Model
-    [Reactive] public string Model { get; set; } = "models-cunet"; 
-    
+    [Reactive] public string Model { get; set; } = "models-cunet";
+
     // Other flags
     [Reactive] public bool Verbose { get; set; } = true;
     [Reactive] [JsonIgnore] public bool TTA { get; set; }
-    
+
     // Paths
     [Reactive] [JsonIgnore] public List<IFileInfo> InputImages { get; set; } = new();
     [Reactive] [JsonIgnore] public IDirectoryInfo? OutputDirectory { get; set; }

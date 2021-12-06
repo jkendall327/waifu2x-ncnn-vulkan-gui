@@ -30,19 +30,19 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> RunCommand { get; }
     public Interaction<Unit, string[]> FindImageDialog { get; } = new();
     public Interaction<Unit, IDirectoryInfo> FindOutputDirectoryDialog { get; } = new();
-        
+
     // Bindings
     [Reactive] public string Report { get; set; } = string.Empty;
-    
+
     [Reactive] public double Progress { get; set; }
-    
-    public List<int> DenoiseLevels { get; set; }= new() { 0, 1, 2, 3 };
-    public List<int> ScaleFactors { get; set; }= new() { 2, 4, 8, 16 };
+
+    public List<int> DenoiseLevels { get; set; } = new() { 0, 1, 2, 3 };
+    public List<int> ScaleFactors { get; set; } = new() { 2, 4, 8, 16 };
     public List<string> Models { get; set; }
 
     // Models
     public Command Command { get; }
-        
+
     public MainWindowViewModel(ICommandRunner runner, IFileInfoFactory factory, IDirectoryService directoryService,
         IPreferencesManager preferencesManager, ILogger<MainWindowViewModel> logger)
     {
@@ -54,12 +54,12 @@ public class MainWindowViewModel : ViewModelBase
         logger.LogInformation("App started");
 
         Command = _preferencesManager.LoadPreferences() ?? new Command();
-        
+
         Models = GetModels();
-        
+
         InputImagePicker = new("Select input...", Command, FindImageDialog, factory);
         OutputDirectoryPicker = new("Set output directory...", FindOutputDirectoryDialog);
-            
+
         RunCommand = CreateRunCommand();
 
         InputImagePicker.Files.CollectionChanged += FilesOnCollectionChanged;
@@ -69,13 +69,13 @@ public class MainWindowViewModel : ViewModelBase
     private List<string> GetModels()
     {
         var directory = _directoryService.GetWaifuDirectory();
-        
+
         var models = directory
             .EnumerateDirectories()
             .Select(x => x.Name)
             .ToList();
-        
-        _logger.LogInformation("Loaded {ModelCount} upscaling models from {ModelDirectory}", 
+
+        _logger.LogInformation("Loaded {ModelCount} upscaling models from {ModelDirectory}",
             models.Count, directory.FullName);
 
         return models;
@@ -91,7 +91,7 @@ public class MainWindowViewModel : ViewModelBase
         var observer = Observer.Create<IDirectoryInfo?>(input =>
         {
             if (input is null) return;
-            
+
             _logger.LogInformation("Output directory changed to {DirectoryName}", input.FullName);
             Command.OutputDirectory = input;
         });
@@ -113,16 +113,16 @@ public class MainWindowViewModel : ViewModelBase
 
         return ReactiveCommand.CreateFromTask(Run, canExecute);
     }
-    
+
     private async Task Run()
     {
         _logger.LogInformation("Running command: {Preview}", Command.Preview);
-        
+
         await _preferencesManager.SavePreferences(Command);
-        
+
         Report = string.Empty;
         Progress = 0;
-        
+
         await foreach (var (report, progress) in _runner.Run(Command))
         {
             Report += report;

@@ -19,12 +19,12 @@ public class CommandTests
 
     private readonly IDirectoryInfo _input;
     private readonly IDirectoryInfo _output;
-    
+
     private readonly string _testFilepath = "/input/myfile.png";
     public CommandTests()
     {
         _fileSystem = new();
-        
+
         _input = _fileSystem.Directory.CreateDirectory("input");
         _output = _fileSystem.Directory.CreateDirectory("output");
     }
@@ -39,7 +39,7 @@ public class CommandTests
 
         _sut.OutputDirectory = _output;
     }
-    
+
     [Fact]
     public void Preview_WhenCommandHasDefaultValues_ShouldJustBeWaifu2xName()
     {
@@ -54,7 +54,7 @@ public class CommandTests
     {
         // TODO: the output path part here is wrong because the output directory
         // is only set to the default in the dialog handler, not in the actual command class.
-        
+
         _fileSystem.File.Create(_testFilepath);
 
         _sut.InputImages = GetFiles();
@@ -67,7 +67,7 @@ public class CommandTests
     public void Preview_WhenGivenOutputButNotInput_ReturnsJustWaifuPortion()
     {
         _sut.OutputDirectory = _output;
-        
+
         _sut.Preview.Should().Be(_waifuPortion);
     }
 
@@ -77,7 +77,7 @@ public class CommandTests
         SetInputAndOutput();
 
         var expected = "waifu-2x-ncnn-vulkan -i \"/input/$IMAGE\" -output-path -o \"/output/$IMAGE-upscaled.png\" -format png -v";
-        
+
         _sut.Preview.Should().Be(expected);
     }
 
@@ -89,7 +89,7 @@ public class CommandTests
         _sut.Model = "arbitraryName";
 
         var expected = "waifu-2x-ncnn-vulkan -i \"/input/$IMAGE\" -output-path -o \"/output/$IMAGE-upscaled.png\" -format png -v -m arbitraryName";
-        
+
         _sut.Preview.Should().Be(expected);
     }
 
@@ -106,7 +106,7 @@ public class CommandTests
         _sut.Suffix = "__testSuffix__";
 
         var expected = "waifu-2x-ncnn-vulkan -i \"/input/$IMAGE\" -output-path -o \"/output/$IMAGE__testSuffix__.png\" -format png -n 2 -s 4 -x -m arbitraryName";
-        
+
         _sut.Preview.Should().Be(expected);
     }
 }
