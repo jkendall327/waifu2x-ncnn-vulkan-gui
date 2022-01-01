@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.IO.Abstractions;
+using System.Text.Json;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -8,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Waifu2x_UI.Core;
 using Waifu2x_UI.Core.Commands;
 using Waifu2x_UI.Core.Filesystem;
 using Waifu2x_UI.Core.Serialization;
@@ -54,7 +54,7 @@ public class App : Application
         services.AddTransient<IPreferencesManager, PreferencesManager>();
         services.AddTransient<MainWindowViewModel>();
 
-        var options = SetupConfiguration(filesystem.File);
+        var options = SetupConfiguration(filesystem.File, filesystem.Directory);
 
         services.AddSingleton(options);
 
@@ -71,8 +71,11 @@ public class App : Application
 
     private static void SetupLogging(IServiceCollection services)
     {
+        var basePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var appFolder = Path.Combine(basePath, "waifu2x-nccn-gui");
+
         var logger = new LoggerConfiguration()
-            .WriteTo.File("app.log")
+            .WriteTo.File(Path.Combine(appFolder, "app.log"))
             .CreateLogger();
 
         services.AddLogging(builder =>
@@ -82,20 +85,23 @@ public class App : Application
         });
     }
 
-    private static SerializationOptions SetupConfiguration(IFile file)
+    private static SerializationOptions SetupConfiguration(IFile file, IDirectory directory)
     {
-        var path = "appsettings.json";
+        var basePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var appFolder = Path.Combine(basePath, "waifu2x-nccn-gui");
+        var configPath = Path.Combine(appFolder, "appsettings.json");
 
-        if (!file.Exists(path))
+        if (!file.Exists(configPath))
         {
+            directory.CreateDirectory(appFolder);
+
             var newOptions = new SerializationOptions();
-            var json = System.Text.Json.JsonSerializer.Serialize(newOptions);
-            file.WriteAllText(path, json);
+            var json = JsonSerializer.Serialize(newOptions);
+            file.WriteAllText(configPath, json);
         }
 
         var config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile(path)
+            .AddJsonFile(configPath)
             .Build();
 
         SerializationOptions options = new();
