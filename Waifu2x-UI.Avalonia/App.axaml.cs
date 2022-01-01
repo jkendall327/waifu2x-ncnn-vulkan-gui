@@ -54,7 +54,7 @@ public class App : Application
         services.AddTransient<IPreferencesManager, PreferencesManager>();
         services.AddTransient<MainWindowViewModel>();
 
-        var options = SetupConfiguration();
+        var options = SetupConfiguration(filesystem.File);
 
         services.AddSingleton(options);
 
@@ -82,11 +82,20 @@ public class App : Application
         });
     }
 
-    private static SerializationOptions SetupConfiguration()
+    private static SerializationOptions SetupConfiguration(IFile file)
     {
+        var path = "appsettings.json";
+
+        if (!file.Exists(path))
+        {
+            var newOptions = new SerializationOptions();
+            var json = System.Text.Json.JsonSerializer.Serialize(newOptions);
+            file.WriteAllText(path, json);
+        }
+
         var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile(path)
             .Build();
 
         SerializationOptions options = new();
