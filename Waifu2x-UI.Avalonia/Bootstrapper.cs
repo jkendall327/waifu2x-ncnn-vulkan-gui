@@ -17,17 +17,22 @@ namespace Waifu2xUI.Avalonia;
 
 public class Bootstrapper
 {
+    private readonly string _appFolder =
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "waifu2x-nccn-gui");
+
     public Window Setup()
     {
         var provider = BuildServiceProvider();
         return provider.GetRequiredService<MainWindow>();
     }
 
-    private static IServiceProvider BuildServiceProvider()
+    private IServiceProvider BuildServiceProvider()
     {
         var services = new ServiceCollection();
 
         var filesystem = new FileSystem();
+
+        filesystem.Directory.CreateDirectory(_appFolder);
 
         services.AddSingleton(filesystem.Directory);
         services.AddSingleton(filesystem.DirectoryInfo);
@@ -39,7 +44,7 @@ public class Bootstrapper
         services.AddTransient<IPreferencesManager, PreferencesManager>();
         services.AddTransient<MainWindowViewModel>();
 
-        var options = SetupConfiguration(filesystem.File, filesystem.Directory);
+        var options = SetupConfiguration(filesystem.File);
 
         services.AddSingleton(options);
 
@@ -53,32 +58,26 @@ public class Bootstrapper
 
         return services.BuildServiceProvider();
     }
-    private static void SetupLogging(IServiceCollection services)
+
+    private void SetupLogging(IServiceCollection services)
     {
-        var basePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var appFolder = Path.Combine(basePath, "waifu2x-nccn-gui");
-
-        var logger = new LoggerConfiguration()
-            .WriteTo.File(Path.Combine(appFolder, "app.log"))
-            .CreateLogger();
-
         services.AddLogging(builder =>
         {
+            var logger = new LoggerConfiguration()
+                .WriteTo.File(Path.Combine(_appFolder, "app.log"))
+                .CreateLogger();
+
             builder.AddConsole();
             builder.AddSerilog(logger);
         });
     }
 
-    private static SerializationOptions SetupConfiguration(IFile file, IDirectory directory)
+    private SerializationOptions SetupConfiguration(IFile file)
     {
-        var basePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var appFolder = Path.Combine(basePath, "waifu2x-nccn-gui");
-        var configPath = Path.Combine(appFolder, "appsettings.json");
+        var configPath = Path.Combine(_appFolder, "appsettings.json");
 
         if (!file.Exists(configPath))
         {
-            directory.CreateDirectory(appFolder);
-
             var newOptions = new SerializationOptions();
             var json = JsonSerializer.Serialize(newOptions);
             file.WriteAllText(configPath, json);
