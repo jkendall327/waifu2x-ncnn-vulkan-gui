@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Waifu2xUI.Avalonia.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="Waifu2x_UI.Avalonia"
+        Title="waifu2x-ui"
         MinWidth="900"
         MinHeight="600"
         Width="900"
