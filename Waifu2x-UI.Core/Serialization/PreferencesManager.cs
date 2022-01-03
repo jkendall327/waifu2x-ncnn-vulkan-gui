@@ -2,6 +2,7 @@ using System.IO.Abstractions;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Waifu2x_UI.Core.Commands;
+using Waifu2x_UI.Core.Filesystem;
 
 namespace Waifu2x_UI.Core.Serialization;
 
@@ -9,7 +10,7 @@ public class PreferencesManager : IPreferencesManager
 {
     private readonly IFile _file;
 
-    private readonly string _filepath = "userpreferences.json";
+    private readonly string _filepath = Path.Combine(Locations.AppConfigFolder, "userpreferences.json");
 
     private readonly SerializationOptions _options;
     private readonly ILogger<PreferencesManager> _logger;
@@ -57,7 +58,7 @@ public class PreferencesManager : IPreferencesManager
         }
         catch (JsonException ex)
         {
-            _logger.LogError(ex, "Exception occured while deserializing data");
+            _logger.LogError(ex, "Exception occured while deserializing data, ignoring preferences");
             return null;
         }
     }

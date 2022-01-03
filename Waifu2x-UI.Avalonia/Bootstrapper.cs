@@ -17,9 +17,6 @@ namespace Waifu2xUI.Avalonia;
 
 public class Bootstrapper
 {
-    private readonly string _appFolder =
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "waifu2x-nccn-gui");
-
     public Window Setup()
     {
         var provider = BuildServiceProvider();
@@ -32,7 +29,7 @@ public class Bootstrapper
 
         var filesystem = new FileSystem();
 
-        filesystem.Directory.CreateDirectory(_appFolder);
+        filesystem.Directory.CreateDirectory(Locations.AppConfigFolder);
 
         services.AddSingleton(filesystem.Directory);
         services.AddSingleton(filesystem.DirectoryInfo);
@@ -64,7 +61,7 @@ public class Bootstrapper
         services.AddLogging(builder =>
         {
             var logger = new LoggerConfiguration()
-                .WriteTo.File(Path.Combine(_appFolder, "app.log"))
+                .WriteTo.File(Path.Combine(Locations.AppConfigFolder, "app.log"))
                 .CreateLogger();
 
             builder.AddConsole();
@@ -74,7 +71,7 @@ public class Bootstrapper
 
     private SerializationOptions SetupConfiguration(IFile file)
     {
-        var configPath = Path.Combine(_appFolder, "appsettings.json");
+        var configPath = Path.Combine(Locations.AppConfigFolder, "appsettings.json");
 
         if (!file.Exists(configPath))
         {
