@@ -18,11 +18,11 @@ Select multiple images to process them all, one at a time.
 
 ## Installation
 
-Currently there are only pre-compiled binaries which you can find in the Releases tab.
+The Releases tab contains a .deb installer which you can download and run to install the app.
 
-Download the archive, extract it, mark the file as executable and open it.
+Once it's installed, run `waifu2x-gui` in a terminal to launch the app.
 
-Currently I've only compiled it for Linux, but it would probably work alright on Windows or OSX with minor tweaks.
+Currently I've only compiled this for Linux, but it would probably work alright on Windows or OSX with minor tweaks.
 
 ## Building
 
