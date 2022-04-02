@@ -30,6 +30,14 @@ This project was built with .NET 6 and Avalonia.
 
 If you have both of those installed, there's nothing weird with the build so you should be able to just clone and build the solution.
 
+Step-by-step:
+
+1. Download and install .NET. You will need a developer SDK, not just the runtime.
+2. Ensure .NET is in your path. You can run `dotnet --list-sdks` to see if it works.
+3. Clone the repo.
+4. Navigate to the repo on your hard-drive.
+5. Run `dotnet run` (to build the app and start it) or `dotnet build` to compile an executable. 
+
 ## Known issues
 
 Due to a bug in how Avalonia handles non-Latin characters on Linux, the app may crash on startup with a message about not being able to load a default font-family.
