@@ -30,6 +30,14 @@ This project was built with .NET 6 and Avalonia.
 
 If you have both of those installed, there's nothing weird with the build so you should be able to just clone and build the solution.
 
+## Known issues
+
+Due to a bug in how Avalonia handles non-Latin characters on Linux, the app may crash on startup with a message about not being able to load a default font-family.
+
+If this happens, launch the app with a modified locale environment variable:
+
+`LC_ALL=C [executable path here]`
+
 ## Contributions
 
 Highly welcome!
