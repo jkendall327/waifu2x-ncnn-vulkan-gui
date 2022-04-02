@@ -3,6 +3,8 @@ using System.Collections.Specialized;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Reactive;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
@@ -53,6 +55,15 @@ public class MainWindowViewModel : ViewModelBase
 
         logger.LogInformation("App started");
 
+        if (CJKLocale() && RunningOnLinux())
+        {
+            var message = "IMPORTANT: If the app crashes on startup, " +
+                          "it's likely because you're using Linux with a non-Latin character locale. " +
+                          "Check the README for a workaround";
+
+            _logger.LogWarning(message);
+        }
+
         Command = _preferencesManager.LoadPreferences() ?? new Command();
 
         Models = GetModels();
@@ -64,6 +75,15 @@ public class MainWindowViewModel : ViewModelBase
 
         InputImagePicker.Files.CollectionChanged += FilesOnCollectionChanged;
         LinkOutputToCommand();
+    }
+
+    private bool RunningOnLinux() => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+
+    private bool CJKLocale()
+    {
+        var culture = Thread.CurrentThread.CurrentCulture;
+
+        return culture.Name is "ja-JP" or "ko-KR" or "zh-CN" or "zh-SG" or "zh-TW" or "zh-CHS" or "zh-CHT";
     }
 
     private List<string> GetModels()
