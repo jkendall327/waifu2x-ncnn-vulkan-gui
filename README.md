@@ -46,6 +46,10 @@ If this happens, launch the app with a modified locale environment variable:
 
 `LC_ALL=C [executable path here]`
 
+If you're building from source, you can also try this:
+
+`LANG=en_US.UTF-8 dotnet run`
+
 ## Contributions
 
 Highly welcome!
